@@ -1,5 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import logo from "@/assets/logo.svg";
 
 const Header = () => {
   const navlinks = [
@@ -21,17 +22,36 @@ const Header = () => {
     },
   ];
 
-  const activeClassName = "border-b border-blue-600 text-blue-600 h-8";
+  const activeClassName =
+    "border-b-2 border-blue-600 text-blue-600 h-8 font-semibold";
+
+  const location = useLocation();
+
+  const { pathname } = location;
+
+  console.log("pathname", pathname);
 
   return (
-    <div className="container mx-auto">
-      <div className="flex justify-between w-full py-5">
-        <span>Logo</span>
+    <div
+      className={`${pathname === "/" ? "container" : "container-sm"} mx-auto`}
+    >
+      <div className="flex items-center justify-between w-full py-3">
+        <span className="flex gap-3 items-center">
+          <img className="w-10 h-10" src={logo} alt="" />{" "}
+          <Link
+            to="/"
+            className="text-blue-600 font-semibold text-2xl cursor-pointer"
+          >
+            Home<span className="text-[#272727] font-normal">Finder</span>
+          </Link>
+        </span>
         <div className="flex gap-5">
           {navlinks.map((link, index) => (
             <NavLink
               className={({ isActive }) =>
-                isActive ? activeClassName : "text-black h-8"
+                isActive
+                  ? activeClassName
+                  : "text-black h-8 font-semibold hover:text-blue-600 hover:border-b-2 hover:border-blue-600"
               }
               to={link.path}
               key={index}
