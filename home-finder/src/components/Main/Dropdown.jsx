@@ -13,9 +13,9 @@ function Dropdown({ items, onSelect, selectedItem }) {
     toggleDropdown();
   };
 
-  console.log(items);
+  // console.log(items);
 
-  console.log("items", items);
+  // console.log("items", items);
 
   return (
     <div className="relative inline-block text-left">

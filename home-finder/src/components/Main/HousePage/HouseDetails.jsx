@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import avatar from "@/assets/avatar.jpeg";
 import { BsDoorOpen, BsLightningFill } from "react-icons/bs";
 import { AiOutlineFire } from "react-icons/ai";
@@ -12,8 +12,10 @@ import { GiFireExtinguisher } from "react-icons/gi";
 import { FiPhoneCall } from "react-icons/fi";
 import HouseCard from "../Home/HouseCard";
 import HouseRent from "./HouseRent";
+import { StateContext } from "../../../contexts/StateProvider";
 
 const HouseDetails = () => {
+  const { allHouse } = useContext(StateContext);
   const facilities = [
     {
       id: 1,
@@ -103,8 +105,6 @@ const HouseDetails = () => {
       icon: GiFlowers,
     },
   ];
-
-  const allHouse = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   return (
     <div>

@@ -1,15 +1,38 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import HouseCard from "./HouseCard";
+import HouseDetails from "./HouseDetails";
+import { StateContext } from "../../../contexts/StateProvider";
 
 const HouseList = () => {
-  const allHouse = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const { allHouse } = useContext(StateContext);
+
+  const [showHouse, setShowHouse] = useState(false);
+  const [selectedHouse, setSelectedHouse] = useState({});
+
   return (
     <div className="grid grid-cols-4 gap-5 mt-10">
-      {allHouse?.map((house, index) => (
-        <div key={index}>
-          <HouseCard house={house} />
+      <div
+        className={`h-full grid ${
+          showHouse ? "grid-cols-3 col-span-3" : "grid-cols-4 col-span-4"
+        } gap-5`}
+      >
+        {allHouse?.map((house, index) => (
+          <div key={index}>
+            <HouseCard
+              house={house}
+              selectedHouse={selectedHouse}
+              setSelectedHouse={setSelectedHouse}
+              setShowHouse={setShowHouse}
+              showHouse={showHouse}
+            />
+          </div>
+        ))}
+      </div>
+      {showHouse && (
+        <div className="col-span-1">
+          <HouseDetails selectedHouse={selectedHouse} />
         </div>
-      ))}
+      )}
     </div>
   );
 };

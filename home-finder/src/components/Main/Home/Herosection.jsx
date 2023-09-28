@@ -7,13 +7,13 @@ import bg from "@/assets/bg.png";
 const Herosection = () => {
   const allCities = inputArray.map((item) => item.City);
 
-  console.log("allCities", allCities);
+  // console.log("allCities", allCities);
 
   const [selectedCity, setSelectedCity] = useState("Dhaka");
   const [selectedAreas, setSelectedAreas] = useState([]);
   const [selectedArea, setSelectedArea] = useState("Mirpur");
 
-  console.log("selectedAreas", selectedAreas);
+  // console.log("selectedAreas", selectedAreas);
 
   // Function to handle city selection
   useEffect(() => {

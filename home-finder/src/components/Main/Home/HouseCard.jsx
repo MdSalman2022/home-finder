@@ -5,35 +5,43 @@ import { BsFillHouseDoorFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
-const HouseCard = ({ house }) => {
+const HouseCard = ({
+  house,
+  setSelectedHouse,
+  selectedHouse,
+  setShowHouse,
+  showHouse,
+}) => {
   return (
     <div className="rounded-xl p-4 w-full shadow-lg bg-white">
-      <img
-        src="https://housing.com/news/wp-content/uploads/2022/11/shutterstock_1715891752-1200x700-compressed.jpg"
-        alt=""
-        className="w-full rounded-2xl"
-      />
+      <Link to={`/house/${house?.id}`}>
+        <img
+          src={house?.images[0]}
+          alt=""
+          className="h-[250px] w-full rounded-2xl object-cover"
+        />
+      </Link>
       <div className="flex flex-col gap-3 mt-5">
-        <p className="text-2xl font-bold">10,000</p>
+        <p className="text-2xl font-bold">৳ {house?.price}</p>
         <div className="flex justify-between w-full">
           <div className="flex flex-col">
             <div className="flex gap-1 items-center">
               <IoBedSharp />
-              <p>3</p>
+              <p>{house?.bedroom}</p>
             </div>
             <p className="font-semibold">Bedrooms</p>
           </div>
           <div className="flex flex-col">
             <div className="flex gap-1 items-center">
               <BiSolidBath />
-              <p>2</p>
+              <p>{house?.bathroom}</p>
             </div>
             <p className="font-semibold">Bathrooms</p>
           </div>
           <div className="flex flex-col">
             <div className="flex gap-1 items-center">
               <BsFillHouseDoorFill />
-              <p>1000sqft</p>
+              <p>{house?.livingArea}sqft</p>
             </div>
             <p className="font-semibold">Living Area</p>
           </div>
@@ -41,14 +49,21 @@ const HouseCard = ({ house }) => {
         <div className="flex items-center w-full justify-between">
           <span className="flex items-center gap-2">
             <FaLocationDot />
-            <span>Mirpur, Dhaka, Bangladesh</span>
+            <span className="text-sm">{house?.location}</span>
           </span>
-          <Link
-            to="/house"
-            className="primary-btn h-8 text-sm flex flex-col items-center justify-center"
+          <div
+            onClick={() => {
+              setSelectedHouse(showHouse ? {} : house);
+              setShowHouse(!showHouse);
+            }}
+            className={`${
+              selectedHouse?.price === house?.price
+                ? "primary-outline-btn"
+                : "primary-btn"
+            }  h-8 text-sm flex flex-col items-center justify-center select-none`}
           >
-            View
-          </Link>
+            {selectedHouse?.price === house?.price ? "Open" : "View"}
+          </div>
         </div>
       </div>
     </div>
