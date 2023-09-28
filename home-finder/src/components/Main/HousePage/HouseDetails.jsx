@@ -14,7 +14,7 @@ import HouseCard from "../Home/HouseCard";
 import HouseRent from "./HouseRent";
 import { StateContext } from "../../../contexts/StateProvider";
 
-const HouseDetails = () => {
+const HouseDetails = ({ house }) => {
   const { allHouse } = useContext(StateContext);
   const facilities = [
     {
@@ -108,17 +108,17 @@ const HouseDetails = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="md:grid grid-cols-3 gap-5">
         <div className="col-span-2">
           <div className="flex items-center justify-between py-5">
             <div className="flex flex-col">
-              <p className="text-xl font-semibold">Property of Atikur Rahman</p>
+              <p className="text-xl font-semibold">Property of {house?.name}</p>
               <div className="flex items-center gap-1">
-                <p>3 Bedrooms </p>
+                <p>{house?.bedroom} Bedrooms </p>
                 <span>·</span>
-                <span>2 Bathrooms</span>
+                <span>{house?.bathroom} Bathrooms</span>
                 <span>·</span>
-                <span>2 Balcony</span>
+                <span>{house?.balcony || 1} Balcony</span>
               </div>
             </div>
             <img
@@ -194,7 +194,7 @@ const HouseDetails = () => {
             </div>
             <div>
               <p className="text-2xl font-semibold">Recommendation</p>
-              <div className="grid grid-cols-2 gap-5 mt-5">
+              <div className="md:grid grid-cols-2 gap-5 mt-5">
                 {allHouse?.slice(0, 3).map((house, index) => (
                   <div key={index}>
                     <HouseCard house={house} />
@@ -205,7 +205,7 @@ const HouseDetails = () => {
           </div>
         </div>
         <div className="col-span-1 relative">
-          <HouseRent />
+          <HouseRent house={house} />
         </div>
       </div>
     </div>

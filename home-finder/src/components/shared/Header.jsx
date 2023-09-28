@@ -35,16 +35,13 @@ const Header = () => {
     <div
       className={`${pathname === "/" ? "container" : "container-sm"} mx-auto`}
     >
-      <div className="flex items-center justify-between w-full py-3">
-        <span className="flex gap-3 items-center">
+      <div className="flex flex-col md:flex-row items-center justify-between w-full py-3">
+        <Link to="/" className="flex gap-3 items-center">
           <img className="w-10 h-10" src={logo} alt="" />{" "}
-          <Link
-            to="/"
-            className="text-blue-600 font-semibold text-2xl cursor-pointer"
-          >
+          <div className="text-blue-600 font-semibold text-2xl cursor-pointer">
             Home<span className="text-[#272727] font-normal">Finder</span>
-          </Link>
-        </span>
+          </div>
+        </Link>
         <div className="flex gap-5">
           {navlinks.map((link, index) => (
             <NavLink

@@ -10,10 +10,12 @@ const HouseList = () => {
   const [selectedHouse, setSelectedHouse] = useState({});
 
   return (
-    <div className="grid grid-cols-4 gap-5 mt-10">
+    <div className="flex flex-col md:grid md:grid-cols-3 2xl:grid-cols-4 gap-5 mt-10">
       <div
-        className={`h-full grid ${
-          showHouse ? "grid-cols-3 col-span-3" : "grid-cols-4 col-span-4"
+        className={`h-full flex flex-col md:grid ${
+          showHouse
+            ? "md:grid-cols-2 2xl:grid-cols-3 md:col-span-2 2xl:col-span-3"
+            : "md:grid-cols-3 2xl:grid-cols-4 md:col-span-3 2xl:col-span-4"
         } gap-5`}
       >
         {allHouse?.map((house, index) => (

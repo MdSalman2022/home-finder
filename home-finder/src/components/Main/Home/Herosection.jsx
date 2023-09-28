@@ -44,9 +44,9 @@ const Herosection = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="bg-gradient-to-r from-blue-500 to-blue-800 w-[95vw] h-[50vh] rounded-3xl relative">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-800 w-full md:w-[95vw] md:h-[50vh] md:rounded-3xl relative">
         <div
-          className="absolute right-10 h-full flex justify-end"
+          className="absolute right-10 h-full hidden md:flex justify-end"
           style={{
             clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)",
           }}
@@ -56,17 +56,17 @@ const Herosection = () => {
         <div className="flex justify-between items-center h-full w-full p-5">
           <div className="flex flex-col gap-5">
             <div className="h-fit bg-blue-900 w-fit flex flex-col gap-3 justify-center p-5 rounded-lg">
-              <p className="text-6xl font-bold text-white">
+              <p className="md:text-4xl 2xl:text-6xl font-bold text-white">
                 Find Your Dream Home
               </p>
-              <p className="text-gray-300 text-xl">
+              <p className="text-gray-300 md:text-xl">
                 Saving much time by finding the match one using our algorithm{" "}
                 <br />
                 that we designed
               </p>
             </div>
 
-            <div className="p-5 bg-white rounded-lg shadow-lg flex items-end justify-between gap-10">
+            <div className="p-5 bg-white rounded-lg shadow-lg flex flex-wrap md:flex-nowrap items-end justify-between gap-2 md:gap-10">
               <div className="flex flex-col gap-2">
                 <p className="font-bold text-xl">District</p>
                 <Dropdown

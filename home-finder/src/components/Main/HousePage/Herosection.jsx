@@ -23,9 +23,9 @@ const Herosection = ({}) => {
   console.log("house", house);
   console.log("house name", house?.name);
   return (
-    <div className="grid grid-cols-3 gap-3 h-[600px]">
+    <div className="flex flex-col md:grid md:grid-cols-3 gap-3 md:h-[600px]">
       <img
-        className="h-[600px] w-full object-cover rounded-l-xl"
+        className="md:h-[600px] w-full object-cover rounded-l-xl"
         src={house?.name && house?.images[0]}
         alt=""
       />

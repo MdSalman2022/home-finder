@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import Dropdown from "../Dropdown";
 
-const HouseRent = () => {
+const HouseRent = ({ house }) => {
   const [selectedArea, setSelectedArea] = useState(1);
   const items = [1, 2, 3, 4, 5];
 
@@ -14,7 +14,7 @@ const HouseRent = () => {
     <div className="sticky top-5 w-full h-fit">
       <div className="bg-white h-full w-full border shadow-xl rounded-lg p-5">
         <div className="flex justify-between">
-          <p className="text-xl font-bold py-5">BDT 35,0000</p>
+          <p className="text-xl font-bold py-5">BDT {house?.price}</p>
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1">
               {" "}

@@ -29,7 +29,7 @@ const HousePage = () => {
   console.log("house name", house?.name);
 
   return (
-    <div className="container-sm mx-auto space-y-3">
+    <div className="container-sm mx-auto space-y-3 px-3 md:px-0">
       <p className="text-3xl font-medium">{house?.name}</p>
       <div className="flex justify-between w-full">
         <div className="flex items-center gap-2">
