@@ -41,10 +41,12 @@ const ConfirmOrder = () => {
   return (
     <div className="py-10 px-4 md:px-0">
       <div className="flex flex-col items-center gap-3">
-        <p className="text-3xl font-bold">How you can take our Service?</p>
+        <p className="text-3xl font-bold text-center">
+          How you can take our Service?
+        </p>
         <p className="text-sm">Here are the steps to take our service</p>
 
-        <div className="flex flex-col-reverse md:grid grid-cols-2 gap-5">
+        <div className="flex flex-col-reverse md:grid grid-cols-2 gap-5 md:mt-5">
           <div className="col-span-1 flex flex-col items-start gap-3 w-full">
             <Accordion
               type="single"

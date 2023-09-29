@@ -20,7 +20,7 @@ const Service = () => {
           </p>
           <p className="tracking-tight text-center md:text-start">
             Tailored Solutions for Your Every Need Unlocking Possibilities, One
-            Service at a Time
+            Service at a Time.
           </p>
         </div>
         <div className="flex flex-col md:grid md:grid-cols-3 gap-5 w-full">
@@ -44,7 +44,7 @@ const Service = () => {
               </div>
             </div>
             <div className="flex flex-col md:grid grid-cols-3 gap-5">
-              <div className="col-span-2 rounded-2xl p-10 flex flex-col gap-3 bg-[#F7F0FE] ">
+              <div className="col-span-2 rounded-2xl p-10 flex flex-col gap-3 bg-[#F7F0FE] text-[#802FDE] ">
                 <GoPackageDependencies className="text-5xl" />
                 <p className="text-2xl font-bold">Packaging and set up</p>
                 <span className="font-semibold">
