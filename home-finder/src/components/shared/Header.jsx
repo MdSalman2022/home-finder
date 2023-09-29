@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.svg";
+import MobileHeader from "./MobileHeader";
 
 const Header = () => {
   const navlinks = [
@@ -33,9 +34,13 @@ const Header = () => {
 
   return (
     <div
-      className={`${pathname === "/" ? "container" : "container-sm"} mx-auto`}
+      className={`${
+        pathname === "/" || "/shifting"
+          ? "container-lg px-0 md:px-10 2xl:px-0"
+          : " container-sm"
+      } mx-auto`}
     >
-      <div className="flex flex-col md:flex-row items-center justify-between w-full py-3">
+      <div className="hidden md:flex flex-col md:flex-row items-center justify-between w-full py-3">
         <Link to="/" className="flex gap-3 items-center">
           <img className="w-10 h-10" src={logo} alt="" />{" "}
           <div className="text-blue-600 font-semibold text-2xl cursor-pointer">
@@ -64,6 +69,7 @@ const Header = () => {
           <span className="primary-btn font-semibold">Signup</span>
         </div>
       </div>
+      <MobileHeader />
     </div>
   );
 };

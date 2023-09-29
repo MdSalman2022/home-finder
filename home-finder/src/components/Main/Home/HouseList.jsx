@@ -10,7 +10,7 @@ const HouseList = () => {
   const [selectedHouse, setSelectedHouse] = useState({});
 
   return (
-    <div className="flex flex-col md:grid md:grid-cols-3 2xl:grid-cols-4 gap-5 mt-10">
+    <div className="flex flex-col md:grid md:grid-cols-3 2xl:grid-cols-4 gap-5 mt-10 px-3 md:px-5 2xl:px-0">
       <div
         className={`h-full flex flex-col md:grid ${
           showHouse

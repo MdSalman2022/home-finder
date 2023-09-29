@@ -59,7 +59,10 @@ const HouseDetails = ({ selectedHouse }) => {
       <p className="font-semibold">Description</p>
       <span className="text-sm">
         {selectedHouse?.description}
-        <Link to="/house" className="text-blue-600 cursor-pointer">
+        <Link
+          to={`house/${selectedHouse?.id}`}
+          className="text-blue-600 cursor-pointer"
+        >
           {" "}
           Read More
         </Link>

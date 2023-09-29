@@ -95,7 +95,7 @@ const Herosection = () => {
                 <p className="font-bold text-xl">Budget</p>
                 <input type="text" className="input-box w-full" />
               </div>
-              <div className="primary-outline-btn h-fit">
+              <div className="primary-outline-btn h-fit w-14 md:w-auto flex justify-center">
                 <FaSearch />
               </div>
             </div>

@@ -180,7 +180,7 @@ const HouseDetails = ({ house }) => {
             </div>
             <div>
               <p className="text-2xl font-semibold">Features</p>
-              <div className="flex flex-wrap gap-5 w-full ">
+              <div className="flex flex-wrap gap-3 w-full ">
                 {features.map((feature, index) => (
                   <div
                     key={index}
@@ -194,7 +194,7 @@ const HouseDetails = ({ house }) => {
             </div>
             <div>
               <p className="text-2xl font-semibold">Recommendation</p>
-              <div className="md:grid grid-cols-2 gap-5 mt-5">
+              <div className="grid md:grid-cols-2 gap-5 mt-5">
                 {allHouse?.slice(0, 3).map((house, index) => (
                   <div key={index}>
                     <HouseCard house={house} />

@@ -36,7 +36,7 @@ function Dropdown({ items, onSelect, selectedItem }) {
       </div>
 
       {isOpen && (
-        <div className="absolute right-0 mt-1 w-full z-[9999] overflow-y-auto scrollbar-thumb-[#103ADC] scrollbar-track-gray-200 scrollbar-thin scrollbar-thumb-rounded-full bg-white border border-gray-300 rounded-md shadow-lg">
+        <div className="absolute left-0 mt-1 min-w-40 min-w-60 w-fit h-fit max-h-80 z-[9999] overflow-y-auto scrollbar-thumb-[#103ADC] scrollbar-track-gray-200 scrollbar-thin scrollbar-thumb-rounded-full bg-white border border-gray-300 rounded-md shadow-lg">
           <div className="py-1">
             {items.map((item, index) => (
               <a

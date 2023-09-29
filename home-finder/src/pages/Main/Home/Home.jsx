@@ -4,7 +4,7 @@ import HouseList from "../../../components/Main/Home/HouseList";
 
 const Home = () => {
   return (
-    <div className="container mx-auto">
+    <div className="container-lg mx-auto ">
       <Herosection />
       <HouseList />
     </div>
