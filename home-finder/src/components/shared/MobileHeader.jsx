@@ -29,8 +29,8 @@ const MobileHeader = () => {
       path: "/shifting",
     },
     {
-      title: "Products",
-      path: "/products",
+      title: "Decor",
+      path: "/decor",
     },
     {
       title: "Designers",
