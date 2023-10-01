@@ -23,16 +23,16 @@ const ProductCard = ({ product }) => {
       <div className="flex justify-between items-center w-full">
         <div className="flex flex-col gap-1">
           <p className="text-xl font-semibold">{product?.price}</p>
-          <p className="font-medium">{product?.name}</p>
+          <p className="font-medium text-sm">{product?.name}</p>
         </div>
         <span
           className="w-10 h-10 rounded-full shadow-lg shadow-red-100 bg-white flex justify-center items-center cursor-pointer"
           onClick={handleClick}
         >
           {like ? (
-            <AiFillHeart className="text-red-600" />
+            <AiFillHeart className="text-red-600 w-9 px-2" />
           ) : (
-            <AiOutlineHeart className="text-red-600" />
+            <AiOutlineHeart className="text-red-600 w-9 px-2" />
           )}
         </span>
       </div>
