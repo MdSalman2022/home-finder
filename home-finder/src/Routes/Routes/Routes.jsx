@@ -6,6 +6,7 @@ import HousePage from "../../pages/Main/Home/HousePage/HousePage";
 import Shifting from "../../pages/Main/Shifting/Shifting";
 import ErrorPage from "@/layouts/Main/ErrorPage";
 import ProductsPage from "@/pages/Main/Products/ProductsPage";
+import Designers from "@/pages/Main/Designers/Designers";
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
       {
         path: "/decor",
         element: <ProductsPage />,
+      },
+      {
+        path: "/designers",
+        element: <Designers />,
       },
     ],
   },

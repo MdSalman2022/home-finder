@@ -8,6 +8,7 @@ const ProductsPage = () => {
     <div>
       <HeroSection />
       <div className="container-lg mx-auto">
+        
         <Categories />
         <ProductsList />
       </div>
