@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.svg";
 import MobileHeader from "./MobileHeader";
+import { FaPlus } from "react-icons/fa";
+import { StateContext } from "@/contexts/StateProvider";
+import { FcGoogle } from "react-icons/fc";
+import { GoogleAuthProvider } from "firebase/auth";
+import { AuthContext } from "@/contexts/AuthProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
+  const { providerLogin, user, logOut } = useContext(AuthContext);
+  const { setIsCreateModalOpen, isCreateModalOpen } = useContext(StateContext);
+
   const navlinks = [
     {
       title: "Home",
@@ -31,6 +47,57 @@ const Header = () => {
   const { pathname } = location;
 
   console.log("pathname", pathname);
+
+  const searchUser = async (user) => {
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/users/getUserById?uid=${user.uid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    return data;
+  };
+
+  const googleLogIn = async (event) => {
+    event.preventDefault();
+    const googleProvider = new GoogleAuthProvider();
+    try {
+      const result = await providerLogin(googleProvider);
+      const user = result.user;
+
+      console.log("user", user);
+      const found = await searchUser(user);
+      console.log(found);
+      if (found.user?.length < 1) {
+        const newUser = {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        };
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/users/create`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newUser),
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+      }
+
+      // const result = await sendToServer(data, user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div
@@ -63,10 +130,52 @@ const Header = () => {
           ))}
         </div>
         <div className="flex gap-2">
-          <span className="primary-btn bg-blue-100 text-blue-600 font-semibold">
-            Signin
+          <span
+            onClick={() => setIsCreateModalOpen(!isCreateModalOpen)}
+            className="flex flex-col justify-center items-center primary-outline-btn font-semibold"
+          >
+            <FaPlus />
           </span>
-          <span className="primary-btn font-semibold">Signup</span>
+          {!user?.uid && (
+            <span
+              onClick={googleLogIn}
+              className="primary-btn bg-white border border-black text-black hover:text-black font-semibold flex items-center gap-5"
+            >
+              <FcGoogle /> Continue With Google
+            </span>
+          )}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              {user?.uid && (
+                <div className="flex items-center gap-2">
+                  <span className="">
+                    Hi, {user?.displayName.split(" ")[0]}
+                  </span>
+                  <img
+                    className="w-10 h-10 rounded-full border"
+                    src={user?.photoURL}
+                    alt=""
+                  />
+                </div>
+              )}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link to="/account">Account</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  logOut();
+                }}
+              >
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <MobileHeader />

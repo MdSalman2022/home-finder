@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import room1 from "@/assets/room1.webp";
 import room2 from "@/assets/room2.webp";
 import room3 from "@/assets/room3.jpeg";
@@ -168,7 +168,9 @@ const StateProvider = ({ children }) => {
     },
   ];
 
-  const stateInfo = { allHouse };
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const stateInfo = { allHouse, setIsCreateModalOpen, isCreateModalOpen };
 
   return (
     <StateContext.Provider value={stateInfo}>{children}</StateContext.Provider>

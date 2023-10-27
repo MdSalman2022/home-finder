@@ -7,6 +7,9 @@ import Shifting from "../../pages/Main/Shifting/Shifting";
 import ErrorPage from "@/layouts/Main/ErrorPage";
 import ProductsPage from "@/pages/Main/Products/ProductsPage";
 import Designers from "@/pages/Main/Designers/Designers";
+import Account from "@/pages/Main/Account/Account";
+import PersionalInfo from "@/components/Main/AccountPage/PersionalInfo";
+import Properties from "@/components/Main/AccountPage/Properties";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +36,18 @@ export const router = createBrowserRouter([
       {
         path: "/designers",
         element: <Designers />,
+      },
+      {
+        path: "/account",
+        element: <Account />,
+      },
+      {
+        path: "/account/personal-info",
+        element: <PersionalInfo />,
+      },
+      {
+        path: "/account/properties",
+        element: <Properties />,
       },
     ],
   },
