@@ -4,6 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 
 const PersionalInfo = () => {
   const { user } = useContext(AuthContext);
+
   return (
     <div className="container-sm mx-auto min-h-[80vh]">
       <p className="text-3xl font-semibold">Account Information</p>

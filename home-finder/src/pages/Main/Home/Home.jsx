@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import Herosection from "../../../components/Main/Home/Herosection";
 import HouseList from "../../../components/Main/Home/HouseList";
-import ModalBox from "@/components/shared/ModalBox";
-import { StateContext } from "@/contexts/StateProvider";
 
 const Home = () => {
   return (
