@@ -130,12 +130,6 @@ const Header = () => {
           ))}
         </div>
         <div className="flex gap-2">
-          <span
-            onClick={() => setIsCreateModalOpen(!isCreateModalOpen)}
-            className="flex flex-col justify-center items-center primary-outline-btn font-semibold"
-          >
-            <FaPlus />
-          </span>
           {!user?.uid && (
             <span
               onClick={googleLogIn}
