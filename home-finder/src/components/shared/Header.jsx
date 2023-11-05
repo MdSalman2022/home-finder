@@ -159,12 +159,12 @@ const Header = () => {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Link className="w-full" to="/account">
+                <Link className="w-full h-full" to="/account">
                   Account
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link className="w-full" to="/account/personal-info">
+                <Link className="w-full h-full" to="/account/personal-info">
                   Profile
                 </Link>
               </DropdownMenuItem>

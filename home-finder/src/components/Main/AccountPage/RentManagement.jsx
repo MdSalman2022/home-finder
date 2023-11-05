@@ -98,7 +98,7 @@ const RentManagement = () => {
   ];
 
   return (
-    <div className="container-sm mx-auto min-h-[80vh] space-y-5">
+    <div className="container-sm mx-auto min-h-screen space-y-5">
       <div className="flex flex-col">
         <h1 className="text-3xl font-semibold text-start">Rent Management</h1>
         <p>
