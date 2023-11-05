@@ -10,6 +10,7 @@ import Designers from "@/pages/Main/Designers/Designers";
 import Account from "@/pages/Main/Account/Account";
 import PersionalInfo from "@/components/Main/AccountPage/PersionalInfo";
 import Properties from "@/components/Main/AccountPage/Properties";
+import RentManagement from "@/components/Main/AccountPage/RentManagement";
 
 export const router = createBrowserRouter([
   {
@@ -46,7 +47,15 @@ export const router = createBrowserRouter([
         element: <PersionalInfo />,
       },
       {
+        path: "/account/rent-management",
+        element: <RentManagement />,
+      },
+      {
         path: "/account/properties",
+        element: <Properties />,
+      },
+      {
+        path: "/account/settings",
         element: <Properties />,
       },
     ],

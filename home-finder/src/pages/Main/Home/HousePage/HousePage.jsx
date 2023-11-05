@@ -12,8 +12,8 @@ const HousePage = () => {
   const { id } = useParams();
   const [house, setHouse] = useState({});
 
-  console.log("allHouse", allHouse);
-  console.log("id", id);
+  // console.log("allHouse", allHouse);
+  // console.log("id", id);
 
   useEffect(() => {
     if (id && allHouse?.length > 0) {

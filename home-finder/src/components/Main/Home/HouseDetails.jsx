@@ -6,24 +6,25 @@ import { IoBedSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 const HouseDetails = ({ selectedHouse }) => {
+  console.log("selectedHouse", selectedHouse);
   return (
     <div className="sticky top-10 flex flex-col gap-2 shadow-lg p-5 rounded-xl">
       <p className="font-semibold">Product Details</p>
       <div className="flex flex-col gap-2">
         <img
           className="h-[200px] object-cover"
-          src={selectedHouse?.images[0]}
+          src={selectedHouse?.images[0] || ""}
           alt=""
         />
         <div className="grid grid-cols-2 gap-x-2">
           <img
             className="h-[100px] w-full object-cover"
-            src={selectedHouse?.images[1]}
+            src={selectedHouse?.images[1] || ""}
             alt=""
           />
           <img
             className="h-[100px] w-full object-cover"
-            src={selectedHouse?.images[2]}
+            src={selectedHouse?.images[2] || ""}
             alt=""
           />
         </div>

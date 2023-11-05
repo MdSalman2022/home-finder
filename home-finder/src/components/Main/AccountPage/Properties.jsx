@@ -1,37 +1,71 @@
 import { StateContext } from "@/contexts/StateProvider";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import HouseCard from "../Home/HouseCard";
 import { FaPlus } from "react-icons/fa";
 import { MdOutlineAddHome } from "react-icons/md";
 import ModalBox from "@/components/shared/ModalBox";
+import { AuthContext } from "@/contexts/AuthProvider";
+import { toast } from "react-hot-toast";
 
 const Properties = () => {
-  const { allHouse } = useContext(StateContext);
+  const { user } = useContext(AuthContext);
+  const { allHouse, userInfo } = useContext(StateContext);
 
   const [showHouse, setShowHouse] = useState(false);
   const [selectedHouse, setSelectedHouse] = useState({});
 
   const { setIsCreateModalOpen, isCreateModalOpen } = useContext(StateContext);
+
+  const [myProperties, setMyProperties] = useState([]);
+
+  useEffect(() => {
+    fetch(
+      `${import.meta.env.VITE_SERVER_URL}/properties/getPropertiesById?id=${
+        userInfo?.id
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => setMyProperties(data))
+      .catch((err) => console.log(err));
+  }, [userInfo]);
+
+  console.log("myProperties", myProperties);
+
   const handleAddProperty = async (e) => {
     e.preventDefault();
 
     const form = e.target;
-    const name = form.name.value;
     const description = form.description.value;
     const location = form.location.value;
     const price = form.price.value;
     const area = form.area.value;
     const bed = form.bed.value;
     const bathroom = form.bathroom.value;
+    const images = "";
+    const floorPlanImage = "";
 
     const newHouse = {
-      name,
-      description,
-      location,
-      price: parseInt(price),
-      area: parseInt(area),
-      bed: parseInt(bed),
-      bathroom: parseInt(bathroom),
+      Name: userInfo?.name,
+      Description: description,
+      RentFee: parseInt(price),
+      Features: "",
+      Images: images,
+      Location: location,
+      PostedBy: userInfo?.id,
+      FloorPlanImage: floorPlanImage,
+      PropertyInfo: {
+        Area: parseInt(area),
+        Bed: parseInt(bed),
+        Bathroom: parseInt(bathroom),
+      },
+      Status: "Available",
+      Timestamp: Date.now(),
     };
 
     console.log("newHouse", newHouse);
@@ -49,7 +83,9 @@ const Properties = () => {
     const data = await response.json();
 
     if (data) {
+      toast.success("Property created successfully");
       console.log("Property created successfully");
+      setIsCreateModalOpen(false);
       return data?.notifications;
     } else {
       console.log("Failed to create property");
@@ -70,11 +106,17 @@ const Properties = () => {
           >
             <label htmlFor="">
               <span className="text-sm">Name</span>
-              <input type="text" name="name" className="input-box w-full" />
+              <input
+                type="text"
+                name="name"
+                defaultValue={userInfo?.name}
+                className="input-box w-full"
+                readOnly
+              />
             </label>
             <label htmlFor="">
               <span className="text-sm">Description</span>
-              <input
+              <textarea
                 type="text"
                 name="description"
                 className="input-box w-full"
@@ -120,17 +162,29 @@ const Properties = () => {
             <MdOutlineAddHome className="text-9xl" />
           </div>
 
-          {allHouse?.map((house, index) => (
-            <div className="" key={index}>
-              <HouseCard
-                house={house}
-                selectedHouse={selectedHouse}
-                setSelectedHouse={setSelectedHouse}
-                setShowHouse={setShowHouse}
-                showHouse={showHouse}
-              />
-            </div>
-          ))}
+          {myProperties?.length > 0
+            ? myProperties?.map((house, index) => (
+                <div className="" key={index}>
+                  <HouseCard
+                    house={house}
+                    selectedHouse={house}
+                    setSelectedHouse={setSelectedHouse}
+                    setShowHouse={setShowHouse}
+                    showHouse={showHouse}
+                  />
+                </div>
+              ))
+            : allHouse?.map((house, index) => (
+                <div className="" key={index}>
+                  <HouseCard
+                    house={house}
+                    selectedHouse={house}
+                    setSelectedHouse={setSelectedHouse}
+                    setShowHouse={setShowHouse}
+                    showHouse={showHouse}
+                  />
+                </div>
+              ))}
         </div>
       </div>
     </div>

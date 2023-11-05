@@ -1,6 +1,7 @@
 import { AuthContext } from "@/contexts/AuthProvider";
 import React, { useContext } from "react";
 import { AiOutlineEye } from "react-icons/ai";
+import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { GrShieldSecurity } from "react-icons/gr";
 import { IoSettingsOutline } from "react-icons/io5";
 import { LiaIdCard } from "react-icons/lia";
@@ -16,6 +17,12 @@ const Account = () => {
       name: "Personal Info",
       description: "Update your personal information.",
       link: "personal-info",
+    },
+    {
+      icon: <FaFileInvoiceDollar />,
+      name: "Rent Management",
+      description: "Manage your rent from here",
+      link: "rent-management",
     },
     {
       icon: <MdOutlineAddHome />,

@@ -71,7 +71,7 @@ const Header = () => {
 
       console.log("user", user);
       const found = await searchUser(user);
-      console.log(found);
+      console.log("found", found);
       if (found.user?.length < 1) {
         const newUser = {
           uid: user.uid,

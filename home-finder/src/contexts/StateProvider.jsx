@@ -1,14 +1,18 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import room1 from "@/assets/room1.webp";
 import room2 from "@/assets/room2.webp";
 import room3 from "@/assets/room3.jpeg";
 import room4 from "@/assets/room4.jpg";
 import room5 from "@/assets/room5.jpeg";
 import map from "@/assets/map.png";
+import { AuthContext } from "./AuthProvider";
 
 export const StateContext = createContext();
 
 const StateProvider = ({ children }) => {
+  const { user } = useContext(AuthContext);
+  const [userInfo, setUserInfo] = useState({});
+
   const allHouse = [
     {
       id: "1",
@@ -31,7 +35,7 @@ const StateProvider = ({ children }) => {
       bathroom: 2,
       livingArea: 1000,
       location: "Dhanmondi, Dhaka, Bangladesh",
-      images: [room1, room2, room3, room4, room5],
+      images: [room2, room1, room3, room4, room5],
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium ab consequatur assumenda quidem exercitationem rem quam id repellendus, eligendi doloremque?",
       map: map,
@@ -44,7 +48,7 @@ const StateProvider = ({ children }) => {
       bathroom: 2,
       livingArea: 1100,
       location: "Banani, Dhaka, Bangladesh",
-      images: [room1, room2, room3, room4, room5],
+      images: [room3, room2, room1, room4, room5],
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium ab consequatur assumenda quidem exercitationem rem quam id repellendus, eligendi doloremque?",
       map: map,
@@ -57,7 +61,7 @@ const StateProvider = ({ children }) => {
       bathroom: 2,
       livingArea: 1100,
       location: "Dhanmondi-2, Dhaka, Bangladesh",
-      images: [room1, room2, room3, room4, room5],
+      images: [room4, room2, room3, room1, room5],
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium ab consequatur assumenda quidem exercitationem rem quam id repellendus, eligendi doloremque?",
       map: map,
@@ -70,7 +74,7 @@ const StateProvider = ({ children }) => {
       bathroom: 2,
       livingArea: 1250,
       location: "Khilgaon, Dhaka, Bangladesh",
-      images: [room1, room2, room3, room4, room5],
+      images: [room5, room2, room3, room4, room1],
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium ab consequatur assumenda quidem exercitationem rem quam id repellendus, eligendi doloremque?",
       map: map,
@@ -168,9 +172,31 @@ const StateProvider = ({ children }) => {
     },
   ];
 
+  useEffect(() => {
+    fetch(
+      `${import.meta.env.VITE_SERVER_URL}/users/getUserById?uid=${user?.uid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => setUserInfo(data.user[0]))
+      .catch((err) => console.log(err));
+  }, [user]);
+
+  console.log("userInfo", userInfo);
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const stateInfo = { allHouse, setIsCreateModalOpen, isCreateModalOpen };
+  const stateInfo = {
+    allHouse,
+    setIsCreateModalOpen,
+    isCreateModalOpen,
+    userInfo,
+  };
 
   return (
     <StateContext.Provider value={stateInfo}>{children}</StateContext.Provider>
