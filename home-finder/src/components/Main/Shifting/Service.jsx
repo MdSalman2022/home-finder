@@ -64,7 +64,7 @@ const Service = () => {
 
           <div className="col-span-1 flex flex-col justify-center rounded-2xl p-10 gap-3 bg-[#FEF9E6] text-[#DAAB00]">
             <TbDiscount2 className="text-7xl" />
-            <p className="text-3xl md:text-5xl leading-relaxed font-bold">
+            <p className="text-3xl md:text-4xl 2xl:text-5xl leading-relaxed font-bold">
               Free <br /> Interior Design <br /> Consultation
             </p>
           </div>

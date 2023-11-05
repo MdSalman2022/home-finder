@@ -33,6 +33,7 @@ const Account = () => {
     {
       icon: <IoSettingsOutline />,
       name: "Settings",
+      link: "settings",
       description: "Update your app settings.",
     },
     {

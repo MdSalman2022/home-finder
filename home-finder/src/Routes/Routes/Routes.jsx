@@ -11,6 +11,7 @@ import Account from "@/pages/Main/Account/Account";
 import PersionalInfo from "@/components/Main/AccountPage/PersionalInfo";
 import Properties from "@/components/Main/AccountPage/Properties";
 import RentManagement from "@/components/Main/AccountPage/RentManagement";
+import Settings from "@/components/Main/AccountPage/Settings";
 
 export const router = createBrowserRouter([
   {
@@ -56,7 +57,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/account/settings",
-        element: <Properties />,
+        element: <Settings />,
       },
     ],
   },

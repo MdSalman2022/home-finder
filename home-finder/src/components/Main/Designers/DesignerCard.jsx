@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import room1 from "@/assets/room1.webp";
 import avatar from "@/assets/avatar.jpeg";
 import { FaLocationArrow, FaStar } from "react-icons/fa";
 import { HiLocationMarker } from "react-icons/hi";
 
 const DesignerCard = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <div className="flex gap-5">
       <img
-        className="aspect-video object-cover max-w-[400px] rounded-lg"
+        className="aspect-video object-cover md:max-w-[200px] 2xl:max-w-[400px] rounded-lg"
         src={room1}
         alt=""
       />
@@ -44,14 +46,25 @@ const DesignerCard = () => {
         </div>
         <div className="flex justify-between items-start">
           <p className="w-[80%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, ad?
+            {isExpanded
+              ? `Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, ad?
             Possimus, cum ad? Ducimus delectus necessitatibus voluptatem aliquid
             perspiciatis praesentium excepturi sequi, maxime itaque temporibus
             voluptatum! Explicabo repudiandae placeat sit? Corrupti consequuntur
             illum delectus. Velit nostrum harum mollitia, veritatis quis
             possimus deleniti maiores ipsam, veniam eos sit blanditiis ut
-            delectus!
+            delectus!`
+              : `Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, ad?
+              Possimus, cum ad? Ducimus delectus necessitatibus voluptatem aliquid
+              perspiciatis praesentium excepturi sequi...`}
+            <button
+              className="text-blue-600"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? "See Less" : "See More"}
+            </button>
           </p>
+
           <span className="flex items-center gap-1">
             <HiLocationMarker />
             <p>Banani, Dhaka</p>

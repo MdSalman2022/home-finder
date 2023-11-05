@@ -7,6 +7,7 @@ import { StateContext } from "@/contexts/StateProvider";
 import { FcGoogle } from "react-icons/fc";
 import { GoogleAuthProvider } from "firebase/auth";
 import { AuthContext } from "@/contexts/AuthProvider";
+import { toast } from "react-hot-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -158,12 +159,19 @@ const Header = () => {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Link to="/account">Account</Link>
+                <Link className="w-full" to="/account">
+                  Account
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link className="w-full" to="/account/personal-info">
+                  Profile
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
                   logOut();
+                  toast.success("Logged Out Successfully");
                 }}
               >
                 Logout

@@ -42,7 +42,7 @@ const DesignerList = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-4">
+      <div className="grid md:grid-cols-3 2xl:grid-cols-4">
         <div className="col-span-1 flex flex-col gap-5 items-start  mt-5">
           <div className="w-full flex flex-col gap-2">
             <p className="text-lg font-semibold">Location</p>
@@ -80,7 +80,7 @@ const DesignerList = () => {
             )}
           </div>
         </div>
-        <div className="col-span-3 flex flex-col gap-5  mt-5">
+        <div className="col-span-2 2xl:col-span-3 flex flex-col gap-5  mt-5">
           <DesignerCard />
           <DesignerCard />
           <DesignerCard />

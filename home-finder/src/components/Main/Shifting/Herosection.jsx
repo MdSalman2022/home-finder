@@ -53,7 +53,7 @@ const Herosection = () => {
         alt=""
       />
 
-      <div className="hidden md:absolute md:top-[50%] md:-translate-y-[50%] left-20 md:flex flex-col justify-center gap-10">
+      <div className="hidden md:absolute md:top-[50%] md:-translate-y-[50%] md:left-5 2xl:left-20 md:flex flex-col justify-center gap-10">
         <h1 className="text-2xl md:text-5xl font-bold text-white">
           House Shifting Service
         </h1>
@@ -71,9 +71,9 @@ const Herosection = () => {
           </p>
         </div>
       </div>
-      <div className="md:absolute md:top-[50%] md:-translate-y-[50%] right-20 flex flex-col justify-center gap-10 md:w-[550px]">
+      <div className="md:absolute md:top-[50%] md:-translate-y-[50%] md:right-5 2xl:right-20 flex flex-col justify-center gap-10 md:w-[400px] 2xl:w-[550px]">
         <di className="flex flex-col p-5 bg-white rounded-xl">
-          <p className="font-semibold text-2xl">
+          <p className="font-semibold md:text-lg 2xl:text-2xl">
             Contact us to ease your shifting process
           </p>
           <p className="text-sm flex flex-wrap">
@@ -84,17 +84,17 @@ const Herosection = () => {
           <form action="" className="flex flex-col gap-3 mt-5">
             <input
               type="text"
-              className="input-box h-12"
+              className="input-box md:h-8 2xl:h-12"
               placeholder="Your Name"
             />
             <input
               type="text"
-              className="input-box h-12"
+              className="input-box md:h-8 2xl:h-12"
               placeholder="Your Phone"
             />
             <input
               type="text"
-              className="input-box h-12"
+              className="input-box md:h-8 2xl:h-12"
               placeholder="Your Email (Optional)"
             />
 
@@ -103,7 +103,7 @@ const Herosection = () => {
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-full h-12 justify-start text-left font-normal",
+                    "w-full md:h-8 2xl:h-12  justify-start text-left font-normal",
                     !date && "text-muted-foreground"
                   )}
                 >
@@ -123,16 +123,18 @@ const Herosection = () => {
             <div className="flex items-center gap-5 justify-between">
               <input
                 type="text"
-                className="input-box h-12 w-full"
+                className="input-box md:h-8 2xl:h-12 w-full"
                 placeholder="From"
               />
               <input
                 type="text"
-                className="input-box h-12 w-full"
+                className="input-box md:h-8 2xl:h-12 w-full"
                 placeholder="To"
               />
             </div>
-            <button className="primary-btn">Submit</button>
+            <button className="primary-btn md:h-10 2xl:h-12 flex items-center justify-center">
+              Submit
+            </button>
           </form>
         </di>
       </div>
