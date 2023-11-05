@@ -69,14 +69,14 @@ const RentManagement = () => {
     },
     {
       id: "9",
-      status: "DUE",
+      status: "Paid",
       method: "Credit Card",
       date: "1/9/2023",
       amount: "17500",
     },
     {
       id: "10",
-      status: "DUE",
+      status: "Paid",
       method: "Credit Card",
       date: "1/10/2023",
       amount: "17350",
