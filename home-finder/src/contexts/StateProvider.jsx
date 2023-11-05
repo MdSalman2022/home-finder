@@ -173,18 +173,20 @@ const StateProvider = ({ children }) => {
   ];
 
   useEffect(() => {
-    fetch(
-      `${import.meta.env.VITE_SERVER_URL}/users/getUserById?uid=${user?.uid}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => setUserInfo(data.user[0]))
-      .catch((err) => console.log(err));
+    if (user?.uid) {
+      fetch(
+        `${import.meta.env.VITE_SERVER_URL}/users/getUserById?uid=${user?.uid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => setUserInfo(data.user[0]))
+        .catch((err) => console.log(err));
+    }
   }, [user]);
 
   console.log("userInfo", userInfo);
