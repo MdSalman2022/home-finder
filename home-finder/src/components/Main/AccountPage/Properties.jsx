@@ -19,20 +19,24 @@ const Properties = () => {
   const [myProperties, setMyProperties] = useState([]);
 
   useEffect(() => {
-    fetch(
-      `${import.meta.env.VITE_SERVER_URL}/properties/getPropertiesById?id=${
-        userInfo?.id
-      }`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => setMyProperties(data))
-      .catch((err) => console.log(err));
+    if (userInfo?.id !== undefined) {
+      // Check if userInfo?.id is not undefined
+      console.log("called", userInfo?.id, myProperties);
+      fetch(
+        `${import.meta.env.VITE_SERVER_URL}/properties/getPropertiesById?id=${
+          userInfo?.id
+        }`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => setMyProperties(data))
+        .catch((err) => console.log(err));
+    }
   }, [userInfo]);
 
   console.log("myProperties", myProperties);
@@ -93,7 +97,7 @@ const Properties = () => {
   };
 
   return (
-    <div className="container-sm mx-auto ">
+    <div className="container-sm mx-auto min-h-screen">
       <ModalBox
         isModalOpen={isCreateModalOpen}
         setIsModalOpen={setIsCreateModalOpen}
