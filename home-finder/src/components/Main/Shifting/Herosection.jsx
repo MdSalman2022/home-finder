@@ -11,9 +11,52 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
+import toast from "react-hot-toast";
 
 const Herosection = () => {
   const [date, setDate] = useState("");
+
+  const handleForm = (e) => {
+    e.preventDefault();
+    const formattedDate = date.toISOString().slice(0, 10);
+
+    const form = e.target;
+    const name = form.name.value;
+    const phone = form.phone.value;
+    const email = form.email.value;
+    const from = form.from.value;
+    const to = form.to.value;
+    const dayOfShifting = formattedDate;
+
+    const data = {
+      name,
+      phone,
+      email,
+      from_location: from,
+      to_location: to,
+      dayOfShifting,
+    };
+
+    console.log("data", data);
+
+    const response = fetch(
+      `${import.meta.env.VITE_SERVER_URL}/shiftings/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    console.log("response", response);
+    if (response) {
+      toast.success("Your shifting request has been submitted successfully");
+    } else {
+      toast.error("Your shifting request has been failed");
+    }
+  };
 
   return (
     <div className="w-full md:h-[70vh] md:rounded-3xl relative">
@@ -81,21 +124,24 @@ const Herosection = () => {
             during your relocation. To initiate the process, kindly complete the
             following form.
           </p>
-          <form action="" className="flex flex-col gap-3 mt-5">
+          <form onSubmit={handleForm} className="flex flex-col gap-3 mt-5">
             <input
               type="text"
               className="input-box md:h-8 2xl:h-12"
               placeholder="Your Name"
+              name="name"
             />
             <input
               type="text"
               className="input-box md:h-8 2xl:h-12"
               placeholder="Your Phone"
+              name="phone"
             />
             <input
               type="text"
               className="input-box md:h-8 2xl:h-12"
               placeholder="Your Email (Optional)"
+              name="email"
             />
 
             <Popover>
@@ -125,11 +171,13 @@ const Herosection = () => {
                 type="text"
                 className="input-box md:h-8 2xl:h-12 w-full"
                 placeholder="From"
+                name="from"
               />
               <input
                 type="text"
                 className="input-box md:h-8 2xl:h-12 w-full"
                 placeholder="To"
+                name="to"
               />
             </div>
             <button className="primary-btn md:h-10 2xl:h-12 flex items-center justify-center">
