@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import avatar from "@/assets/avatar.jpeg";
 import { BsDoorOpen, BsLightningFill } from "react-icons/bs";
 import { AiOutlineFire } from "react-icons/ai";
@@ -13,9 +13,11 @@ import { FiPhoneCall } from "react-icons/fi";
 import HouseCard from "../Home/HouseCard";
 import HouseRent from "./HouseRent";
 import { StateContext } from "../../../contexts/StateProvider";
+import { useParams } from "react-router-dom";
 
 const HouseDetails = ({ house }) => {
   const { allHouse } = useContext(StateContext);
+
   const facilities = [
     {
       id: 1,
@@ -106,17 +108,26 @@ const HouseDetails = ({ house }) => {
     },
   ];
 
+  const propertyInfoObject =
+    (house?.Name && JSON?.parse(house?.PropertyInfo)) || {};
+
+  console.log("propertyInfoObject", propertyInfoObject);
+
   return (
     <div>
       <div className="md:grid grid-cols-3 gap-5">
         <div className="col-span-2">
           <div className="flex items-center justify-between py-5">
             <div className="flex flex-col">
-              <p className="text-xl font-semibold">Property of {house?.name}</p>
+              <p className="text-xl font-semibold">
+                Property of {house?.name || house?.Name}
+              </p>
               <div className="flex items-center gap-1">
-                <p>{house?.bedroom} Bedrooms </p>
+                <p>{house?.bedroom || propertyInfoObject?.Bed} Bedrooms </p>
                 <span>·</span>
-                <span>{house?.bathroom} Bathrooms</span>
+                <span>
+                  {house?.bathroom || propertyInfoObject?.Bathroom} Bathrooms
+                </span>
                 <span>·</span>
                 <span>{house?.balcony || 1} Balcony</span>
               </div>

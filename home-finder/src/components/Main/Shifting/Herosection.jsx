@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import bg from "@/assets/homeshifting.jpg";
 import { BsCheckCircleFill } from "react-icons/bs";
 import { Calendar } from "@/components/ui/calendar";
@@ -12,8 +12,10 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
+import { StateContext } from "@/contexts/StateProvider";
 
 const Herosection = () => {
+  const { userInfo } = useContext(StateContext);
   const [date, setDate] = useState("");
 
   const handleForm = (e) => {
@@ -27,6 +29,7 @@ const Herosection = () => {
     const from = form.from.value;
     const to = form.to.value;
     const dayOfShifting = formattedDate;
+    const submittedBy = userInfo?.id || "";
 
     const data = {
       name,
@@ -35,6 +38,7 @@ const Herosection = () => {
       from_location: from,
       to_location: to,
       dayOfShifting,
+      submittedBy,
     };
 
     console.log("data", data);
@@ -51,10 +55,10 @@ const Herosection = () => {
     );
 
     console.log("response", response);
-    if (response) {
-      toast.success("Your shifting request has been submitted successfully");
-    } else {
+    if (response?.error) {
       toast.error("Your shifting request has been failed");
+    } else {
+      toast.success("Your shifting request has been submitted successfully");
     }
   };
 

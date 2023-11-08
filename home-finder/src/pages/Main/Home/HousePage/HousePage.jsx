@@ -11,9 +11,32 @@ const HousePage = () => {
   const { allHouse } = useContext(StateContext);
   const { id } = useParams();
   const [house, setHouse] = useState({});
+  const [houseData, setHouseData] = useState({});
 
   // console.log("allHouse", allHouse);
   // console.log("id", id);
+
+  useEffect(() => {
+    fetch(
+      `${
+        import.meta.env.VITE_SERVER_URL
+      }/properties/getPropertiesByUID?id=${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("data", data);
+        setHouseData(data[0]);
+      });
+  }, [id]);
+
+  console.log("houseData", houseData);
+  console.log("houseData name", houseData?.Name);
 
   useEffect(() => {
     if (id && allHouse?.length > 0) {
@@ -31,6 +54,7 @@ const HousePage = () => {
   return (
     <div className="container-sm mx-auto space-y-3 px-3 md:px-0">
       <p className="text-3xl font-medium">{house?.name}</p>
+
       <div className="flex justify-between w-full">
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1">
@@ -51,8 +75,8 @@ const HousePage = () => {
           </span>
         </div>
       </div>
-      <Herosection house={house} />
-      <HouseDetails house={house} />
+      <Herosection house={house || houseData} />
+      <HouseDetails house={house || houseData} />
     </div>
   );
 };

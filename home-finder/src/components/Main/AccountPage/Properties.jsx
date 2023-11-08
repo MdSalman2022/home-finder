@@ -11,6 +11,9 @@ const Properties = () => {
   const { user } = useContext(AuthContext);
   const { allHouse, userInfo } = useContext(StateContext);
 
+  const [heroImages, setHeroImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
+
   const [showHouse, setShowHouse] = useState(false);
   const [selectedHouse, setSelectedHouse] = useState({});
 
@@ -96,6 +99,52 @@ const Properties = () => {
     }
   };
 
+  const handleFilesSelect = (event) => {
+    setSelectedImages([]);
+    const totalImages = event.target.files.length;
+
+    if (totalImages > 5) {
+      toast.error("You can upload a maximum of 5 images!");
+      return;
+    }
+
+    let files = Array.from(event.target.files); // Convert files into an array
+
+    const previewImageArray = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      const previewImage = URL.createObjectURL(file);
+      previewImageArray.push(previewImage);
+      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, file]);
+    }
+  };
+
+  useEffect(() => {
+    const imageHostKey = "e9ee41ec2bd1b26ca469c791ef1a12c2";
+
+    if (selectedImages) {
+      const formData = new FormData();
+      formData.append("selectedImages", selectedImages);
+      const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
+      fetch(url, {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((imgUpload) => {
+          if (imgUpload.success) {
+            console.log("imgUpload", imgUpload);
+            console.log("imgUpload", imgUpload.data);
+            const { url } = imgUpload.data;
+            setHeroImages([...heroImages, url]);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  });
+
   return (
     <div className="container-sm mx-auto min-h-screen">
       <ModalBox
@@ -108,6 +157,20 @@ const Properties = () => {
             onSubmit={handleAddProperty}
             className="flex flex-col gap-5 w-full p-5"
           >
+            <label htmlFor="" className="flex flex-col relative">
+              <div className="space-y-2">
+                <span className="text-sm border border-dashed flex items-center justify-center h-16 w-full p-5 rounded-lg">
+                  Upload upto 5 images
+                </span>
+              </div>
+              <input
+                type="file"
+                multiple
+                onChange={handleFilesSelect}
+                name="image[]"
+                className="opacity-0 h-full w-full absolute top-0 cursor-pointer"
+              />
+            </label>
             <label htmlFor="">
               <span className="text-sm">Name</span>
               <input
