@@ -111,9 +111,14 @@ const HouseRent = ({ house }) => {
     <div className="sticky top-5 w-full h-fit">
       <ModalBox isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
         <div className="flex flex-col bg-white rounded-lg py-5 w-96">
-          <span className="absolute top-3 right-3 text-black hover:text-red-600 cursor-pointer text-xl">
+          <span
+            onClick={() => setIsModalOpen(false)}
+            className="absolute top-3 right-3 text-black hover:text-red-600 cursor-pointer text-xl"
+          >
             <RxCross2 />
           </span>
+
+          <p className="border-b px-3 pb-2">Reservation Form</p>
           <form
             onSubmit={handleAddProperty}
             className="flex flex-col gap-5 w-full p-5"
