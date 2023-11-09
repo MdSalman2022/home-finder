@@ -83,7 +83,7 @@ const HouseRent = ({ house }) => {
       phone,
       checkIn,
       submittedBy,
-      propertyId: house?.id,
+      propertyId: house?.pid,
     };
 
     console.log("data", data);

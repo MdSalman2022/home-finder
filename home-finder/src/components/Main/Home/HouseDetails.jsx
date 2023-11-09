@@ -16,35 +16,31 @@ const HouseDetails = ({ selectedHouse }) => {
   const propertyInfoObject =
     (selectedHouse?.Name && JSON?.parse(selectedHouse?.PropertyInfo)) || {};
 
+  const imagesArray =
+    (selectedHouse?.Images &&
+      JSON.parse(selectedHouse?.Images.replace(/\\/g, ""))) ||
+    [];
+  console.log("imagesArray", imagesArray);
+
   console.log("propertyInfoObject", propertyInfoObject);
   return (
     <div className="sticky top-10 flex flex-col gap-2 shadow-lg p-5 rounded-xl">
-      <p className="font-semibold">Product Details</p>
-      <div className="flex flex-col gap-2">
+      <p className="font-semibold">Property Quick view</p>
+      <div className="flex flex-col gap-0">
         <img
           className="h-[200px] object-cover"
-          src={
-            selectedHouse?.images?.length > 0 ? selectedHouse?.images[0] : room1
-          }
+          src={selectedHouse?.Images?.length > 0 ? imagesArray[0] : room1}
           alt=""
         />
         <div className="grid grid-cols-2 gap-x-2">
           <img
             className="h-[100px] w-full object-cover"
-            src={
-              selectedHouse?.images?.length > 0
-                ? selectedHouse?.images[1]
-                : room2
-            }
+            src={selectedHouse?.Images?.length > 0 ? imagesArray[1] : room2}
             alt=""
           />
           <img
             className="h-[100px] w-full object-cover"
-            src={
-              selectedHouse?.images?.length > 0
-                ? selectedHouse?.images[2]
-                : room3
-            }
+            src={selectedHouse?.Images?.length > 0 ? imagesArray[2] : room3}
             alt=""
           />
         </div>
@@ -79,7 +75,10 @@ const HouseDetails = ({ selectedHouse }) => {
       </span>
       <p className="font-semibold">Description</p>
       <span className="text-sm">
-        {selectedHouse?.Description}
+        {
+          //only 100 words will show here
+          selectedHouse?.Description?.split(" ").splice(0, 20).join(" ")
+        }
         <Link
           to={`house/${selectedHouse?.id}`}
           className="text-blue-600 cursor-pointer"

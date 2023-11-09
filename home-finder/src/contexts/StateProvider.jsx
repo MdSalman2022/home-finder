@@ -6,6 +6,7 @@ import room4 from "@/assets/room4.jpg";
 import room5 from "@/assets/room5.jpeg";
 import map from "@/assets/map.png";
 import { AuthContext } from "./AuthProvider";
+import { useQuery } from "@tanstack/react-query";
 
 export const StateContext = createContext();
 
@@ -191,11 +192,38 @@ const StateProvider = ({ children }) => {
 
   console.log("userInfo", userInfo);
 
-  const [allHouse, setAllHouse] = useState([]);
+  // const [allHouse, setAllHouse] = useState([]);
 
-  useEffect(() => {
+  const {
+    data: allHouse = [],
+    refetch: refetchAllHouse,
+    isLoading: isAllHouseLoading,
+    error,
+  } = useQuery({
+    queryKey: ["allHouse", userInfo] || [],
+    queryFn: async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/properties/getAll`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return response.json();
+    },
+    cacheTime: 5 * (60 * 1000), // cache data for 5 minutes
+    staleTime: 5 * (60 * 1000), // consider data fresh for 5 minutes
+  });
+
+  /*   useEffect(() => {
     if (userInfo?.id !== undefined) {
-      // Check if userInfo?.id is not undefined
       fetch(`${import.meta.env.VITE_SERVER_URL}/properties/getAll`, {
         method: "GET",
         headers: {
@@ -206,7 +234,7 @@ const StateProvider = ({ children }) => {
         .then((data) => setAllHouse(data))
         .catch((err) => console.log(err));
     }
-  }, [userInfo]);
+  }, [userInfo]); */
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -215,6 +243,8 @@ const StateProvider = ({ children }) => {
     setIsCreateModalOpen,
     isCreateModalOpen,
     userInfo,
+    refetchAllHouse,
+    isAllHouseLoading,
   };
 
   return (

@@ -1,16 +1,18 @@
 import { StateContext } from "@/contexts/StateProvider";
 import React, { useContext, useState, useEffect } from "react";
 import HouseCard from "../Home/HouseCard";
-import { FaPlus } from "react-icons/fa";
+import { FaImages, FaPlus } from "react-icons/fa";
 import { MdOutlineAddHome } from "react-icons/md";
 import ModalBox from "@/components/shared/ModalBox";
 import { AuthContext } from "@/contexts/AuthProvider";
 import { toast } from "react-hot-toast";
 import RentedByCard from "./RentedByCard";
+import { BiImageAdd } from "react-icons/bi";
+import { useQuery } from "@tanstack/react-query";
 
 const Properties = () => {
   const { user } = useContext(AuthContext);
-  const { allHouse, userInfo } = useContext(StateContext);
+  const { userInfo, refetchAllHouse } = useContext(StateContext);
 
   const [heroImages, setHeroImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
@@ -21,9 +23,39 @@ const Properties = () => {
 
   const { setIsCreateModalOpen, isCreateModalOpen } = useContext(StateContext);
 
-  const [myProperties, setMyProperties] = useState([]);
+  // const [myProperties, setMyProperties] = useState([]);
 
-  useEffect(() => {
+  const {
+    data: myProperties = [],
+    refetch: refetchMyProperties,
+    isLoading: isMyPropertiesLoading,
+    error,
+  } = useQuery({
+    queryKey: (userInfo?.id !== undefined && ["myProperties", userInfo]) || [],
+    queryFn: async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/properties/getPropertiesById?id=${
+          userInfo?.id
+        }`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return response.json();
+    },
+    cacheTime: 2 * (60 * 1000), // cache data for 2 minutes
+    staleTime: 1 * (60 * 1000), // consider data fresh for 1 minutes
+  });
+
+  /*  useEffect(() => {
     if (userInfo?.id !== undefined) {
       // Check if userInfo?.id is not undefined
       console.log("called", userInfo?.id, myProperties);
@@ -42,7 +74,7 @@ const Properties = () => {
         .then((data) => setMyProperties(data))
         .catch((err) => console.log(err));
     }
-  }, [userInfo]);
+  }, [userInfo]); */
 
   console.log("myProperties", myProperties);
 
@@ -94,31 +126,11 @@ const Properties = () => {
       toast.success("Property created successfully");
       console.log("Property created successfully");
       setIsCreateModalOpen(false);
+      refetchAllHouse();
+      refetchMyProperties();
       return data?.notifications;
     } else {
       console.log("Failed to create property");
-    }
-  };
-
-  const handleFilesSelect = (event) => {
-    setSelectedImages([]);
-    const totalImages = event.target.files.length;
-
-    if (totalImages > 5) {
-      toast.error("You can upload a maximum of 5 images!");
-      return;
-    }
-
-    let files = Array.from(event.target.files); // Convert files into an array
-
-    const previewImageArray = [];
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-
-      const previewImage = URL.createObjectURL(file);
-      previewImageArray.push(previewImage);
-      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, file]);
     }
   };
 
@@ -161,78 +173,140 @@ const Properties = () => {
 
   console.log("myProperties", myProperties);
 
+  const handleFilesSelect = (event) => {
+    console.log("heroImages length", heroImages);
+    if (selectedImages.length >= 5) {
+      toast.error("You can't upload more than 5 images");
+      return;
+    } else {
+      const totalImages = event.target.files.length;
+
+      if (totalImages > 5) {
+        toast.error("You can upload a maximum of 5 images!");
+        return;
+      }
+
+      let files = Array.from(event.target.files); // Convert files into an array
+
+      const previewImageArray = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        const previewImage = URL.createObjectURL(file);
+        previewImageArray.push(previewImage);
+        setSelectedImages((prevSelectedImages) => [
+          ...prevSelectedImages,
+          file,
+        ]);
+      }
+    }
+  };
+
   return (
     <div className="container-sm mx-auto min-h-screen">
       <ModalBox
         isModalOpen={isCreateModalOpen}
         setIsModalOpen={setIsCreateModalOpen}
       >
-        <div className="bg-white rounded-lg w-[500px]">
+        <div className="bg-white rounded-lg md:min-w-[900px] 2xl:max-h-[850px]">
           <p className="border-b px-5 py-3">Add Property</p>
-          <form
-            onSubmit={handleAddProperty}
-            className="flex flex-col gap-5 w-full p-5"
-          >
-            <label htmlFor="" className="flex flex-col relative">
-              <div className="space-y-2">
-                <span className="text-sm border border-dashed flex items-center justify-center h-16 w-full p-5 rounded-lg">
-                  Upload upto 5 images
-                </span>
+          <div className="grid grid-cols-2 p-2 gap-3 h-full">
+            <label htmlFor="" className="flex flex-col  ">
+              <div className="space-y-2 flex flex-col justify-between h-[92%]">
+                <div className="flex flex-col h-full">
+                  {heroImages?.length > 0 ? (
+                    <div className="grid grid-cols-2 gap-2">
+                      {heroImages?.map((image, index) => (
+                        <img
+                          src={image}
+                          key={index}
+                          alt=""
+                          className="w-full h-24 object-cover rounded-lg"
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex h-full justify-center items-center ">
+                      <FaImages className="text-5xl" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col items-center justify-center gap-5 border border-dashed border-gray-600 h-60 w-full p-5 rounded-lg relative">
+                  <BiImageAdd className="text-5xl" />
+                  <span className="text-sm">Upload upto 5 images</span>
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleFilesSelect}
+                    name="image[]"
+                    className="opacity-0 h-full w-full absolute top-0 cursor-pointer"
+                  />
+                </div>
               </div>
-              <input
-                type="file"
-                multiple
-                onChange={handleFilesSelect}
-                name="image[]"
-                className="opacity-0 h-full w-full absolute top-0 cursor-pointer"
-              />
             </label>
-            <label htmlFor="">
-              <span className="text-sm">Name</span>
-              <input
-                type="text"
-                name="name"
-                defaultValue={userInfo?.name}
-                className="input-box w-full"
-                readOnly
-              />
-            </label>
-            <label htmlFor="">
-              <span className="text-sm">Description</span>
-              <textarea
-                type="text"
-                name="description"
-                className="input-box w-full"
-              />
-            </label>
-            <label htmlFor="">
-              <span className="text-sm">Address</span>
-              <input type="text" name="location" className="input-box w-full" />
-            </label>
-            <label htmlFor="">
-              <span className="text-sm">Price (Tk) </span>
-              <input type="number" name="price" className="input-box w-full" />
-            </label>
-            <label htmlFor="">
-              <span className="text-sm">Living Area</span>
-              <input type="number" name="area" className="input-box w-full" />
-            </label>
-            <label htmlFor="">
-              <span className="text-sm">Bed</span>
-              <input type="number" name="bed" className="input-box w-full" />
-            </label>
-            <label htmlFor="">
-              <span className="text-sm">Bathroom</span>
-              <input
-                type="number"
-                name="bathroom"
-                className="input-box w-full"
-              />
-            </label>
-            <button type="submit" className="primary-btn">
-              Add Property
-            </button>
-          </form>
+            <form
+              onSubmit={handleAddProperty}
+              className="flex flex-col gap-1 2xl:gap-5 w-full p-2 2xl:p-5"
+            >
+              <label htmlFor="">
+                <span className="text-sm">Name</span>
+                <input
+                  type="text"
+                  name="name"
+                  defaultValue={userInfo?.name}
+                  className="input-box w-full"
+                  readOnly
+                />
+              </label>
+              <label htmlFor="">
+                <span className="text-sm">Description</span>
+                <textarea
+                  type="text"
+                  name="description"
+                  className="input-box w-full"
+                />
+              </label>
+              <label htmlFor="">
+                <span className="text-sm">Address</span>
+                <input
+                  type="text"
+                  name="location"
+                  className="input-box w-full"
+                />
+              </label>
+              <label htmlFor="">
+                <span className="text-sm">Price (Tk) </span>
+                <input
+                  type="number"
+                  name="price"
+                  className="input-box w-full"
+                />
+              </label>
+              <label htmlFor="">
+                <span className="text-sm">Living Area</span>
+                <input type="number" name="area" className="input-box w-full" />
+              </label>
+              <label htmlFor="">
+                <span className="text-sm">Bed</span>
+                <input type="number" name="bed" className="input-box w-full" />
+              </label>
+              <label htmlFor="">
+                <span className="text-sm">Bathroom</span>
+                <input
+                  type="number"
+                  name="bathroom"
+                  className="input-box w-full"
+                />
+              </label>
+              <button
+                type="submit"
+                className="primary-btn md:h-10 md:text-sm 2xl:text-lg 2xl:h-12 flex items-center justify-center"
+              >
+                Add Property
+              </button>
+            </form>
+          </div>
         </div>
       </ModalBox>
       <div className="flex flex-col gap-5">
