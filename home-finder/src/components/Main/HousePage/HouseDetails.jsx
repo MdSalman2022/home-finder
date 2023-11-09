@@ -110,8 +110,7 @@ const HouseDetails = ({ house }) => {
 
   const propertyInfoObject =
     (house?.Name && JSON?.parse(house?.PropertyInfo)) || {};
-
-  console.log("propertyInfoObject", propertyInfoObject);
+ 
 
   console.log("house details", house);
 
