@@ -6,6 +6,7 @@ import { MdOutlineAddHome } from "react-icons/md";
 import ModalBox from "@/components/shared/ModalBox";
 import { AuthContext } from "@/contexts/AuthProvider";
 import { toast } from "react-hot-toast";
+import RentedByCard from "./RentedByCard";
 
 const Properties = () => {
   const { user } = useContext(AuthContext);
@@ -16,6 +17,7 @@ const Properties = () => {
 
   const [showHouse, setShowHouse] = useState(false);
   const [selectedHouse, setSelectedHouse] = useState({});
+  const [showRentInfo, setShowRentInfo] = useState(false);
 
   const { setIsCreateModalOpen, isCreateModalOpen } = useContext(StateContext);
 
@@ -54,7 +56,6 @@ const Properties = () => {
     const area = form.area.value;
     const bed = form.bed.value;
     const bathroom = form.bathroom.value;
-    const images = "";
     const floorPlanImage = "";
 
     const newHouse = {
@@ -62,7 +63,7 @@ const Properties = () => {
       Description: description,
       RentFee: parseInt(price),
       Features: "",
-      Images: images,
+      Images: JSON.stringify(heroImages),
       Location: location,
       PostedBy: userInfo?.id,
       FloorPlanImage: floorPlanImage,
@@ -121,29 +122,44 @@ const Properties = () => {
     }
   };
 
-  useEffect(() => {
-    const imageHostKey = "e9ee41ec2bd1b26ca469c791ef1a12c2";
+  console.log("selectedImages", selectedImages);
 
-    if (selectedImages) {
-      const formData = new FormData();
-      formData.append("selectedImages", selectedImages);
-      const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
-      fetch(url, {
-        method: "POST",
-        body: formData,
-      })
-        .then((res) => res.json())
-        .then((imgUpload) => {
-          if (imgUpload.success) {
-            console.log("imgUpload", imgUpload);
-            console.log("imgUpload", imgUpload.data);
-            const { url } = imgUpload.data;
-            setHeroImages([...heroImages, url]);
+  useEffect(() => {
+    const uploadImagesSequentially = async () => {
+      const imageHostKey = "e9ee41ec2bd1b26ca469c791ef1a12c2";
+
+      for (let i = 0; i < selectedImages.length; i++) {
+        const formData = new FormData();
+        formData.append("image", selectedImages[i]);
+
+        const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (response.ok) {
+            const imgUpload = await response.json();
+            if (imgUpload.success) {
+              const imageUrl = imgUpload.data.url;
+              setHeroImages((prevHeroImages) => [...prevHeroImages, imageUrl]);
+            }
           }
-        })
-        .catch((err) => console.log(err));
-    }
-  });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+
+    // Call this function when you want to start the sequential upload
+    uploadImagesSequentially();
+  }, [selectedImages]);
+
+  console.log("heroImages", heroImages);
+
+  console.log("myProperties", myProperties);
 
   return (
     <div className="container-sm mx-auto min-h-screen">
@@ -220,38 +236,43 @@ const Properties = () => {
         </div>
       </ModalBox>
       <div className="flex flex-col gap-5">
-        <p className="text-3xl font-semibold my-10">Your Properties</p>
-        <div className="grid grid-cols-3 gap-5">
+        <p className="text-3xl font-semibold my-10">My Properties</p>
+        <div
+          className={`grid ${
+            showRentInfo ? "grid-cols-4" : "grid-cols-3"
+          } gap-5`}
+        >
           <div
-            onClick={() => setIsCreateModalOpen(true)}
-            className="w-full h-full shadow-lg rounded-lg flex flex-col justify-center items-center cursor-pointer"
+            className={`grid ${
+              showRentInfo ? "col-span-3 grid-cols-2" : "col-span-3 grid-cols-3"
+            }    gap-5`}
           >
-            <MdOutlineAddHome className="text-9xl" />
-          </div>
+            <div
+              onClick={() => setIsCreateModalOpen(true)}
+              className="w-full h-full shadow-lg rounded-lg flex flex-col justify-center items-center cursor-pointer"
+            >
+              <MdOutlineAddHome className="text-9xl" />
+            </div>
 
-          {myProperties?.length > 0
-            ? myProperties?.map((house, index) => (
-                <div className="" key={index}>
-                  <HouseCard
-                    house={house}
-                    selectedHouse={house}
-                    setSelectedHouse={setSelectedHouse}
-                    setShowHouse={setShowHouse}
-                    showHouse={showHouse}
-                  />
-                </div>
-              ))
-            : allHouse?.map((house, index) => (
-                <div className="" key={index}>
-                  <HouseCard
-                    house={house}
-                    selectedHouse={house}
-                    setSelectedHouse={setSelectedHouse}
-                    setShowHouse={setShowHouse}
-                    showHouse={showHouse}
-                  />
-                </div>
-              ))}
+            {myProperties?.map((house, index) => (
+              <div className="" key={index}>
+                <HouseCard
+                  house={house}
+                  selectedHouse={house}
+                  setSelectedHouse={setSelectedHouse}
+                  setShowHouse={setShowHouse}
+                  showHouse={showHouse}
+                  setShowRentInfo={setShowRentInfo}
+                  showRentInfo={showRentInfo}
+                />
+              </div>
+            ))}
+          </div>
+          {showRentInfo && (
+            <div className="col-span-1">
+              <RentedByCard selectedHouse={selectedHouse} />
+            </div>
+          )}
         </div>
       </div>
     </div>

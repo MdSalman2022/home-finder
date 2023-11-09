@@ -15,8 +15,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
+import { AuthContext } from "@/contexts/AuthProvider";
 
 const HouseRent = ({ house }) => {
+  const { user, logOut, googleLogIn } = useContext(AuthContext);
   const { userInfo } = useContext(StateContext);
   const [selectedArea, setSelectedArea] = useState(1);
   const [phone, setPhone] = useState("");
@@ -68,7 +70,6 @@ const HouseRent = ({ house }) => {
     e.preventDefault();
 
     if (progress < maxProgress) {
-      // Progress is not 100%, don't submit the form
       return;
     }
     const formattedDate = date.toISOString().slice(0, 10);
@@ -224,14 +225,34 @@ const HouseRent = ({ house }) => {
             </div>
           </div>
         </div>
-        <div className="flex justify-center mt-5">
-          <button
-            onClick={() => setIsModalOpen(!isModalOpen)}
-            className="primary-btn shadow-lg shadow-blue-100 h-12 w-full flex justify-center items-center"
-          >
-            Reserve
-          </button>
-        </div>
+        {!user?.uid ? (
+          <div className="flex justify-center mt-5">
+            <button
+              onClick={googleLogIn}
+              className="primary-btn shadow-lg shadow-blue-100 h-12 w-full flex justify-center items-center"
+            >
+              Login to Reserve
+            </button>
+          </div>
+        ) : house?.Status === "Available" ? (
+          <div className="flex justify-center mt-5">
+            <button
+              onClick={() => setIsModalOpen(!isModalOpen)}
+              className="primary-btn shadow-lg shadow-blue-100 h-12 w-full flex justify-center items-center"
+            >
+              Reserve
+            </button>
+          </div>
+        ) : (
+          <div className="flex justify-center mt-5">
+            <button
+              onClick={() => toast.error("This property is not available")}
+              className="disabled-btn shadow-lg h-12 w-full flex justify-center items-center"
+            >
+              Reserve
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

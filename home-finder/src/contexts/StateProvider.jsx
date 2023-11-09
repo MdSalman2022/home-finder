@@ -13,7 +13,7 @@ const StateProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState({});
 
-  const allHouse = [
+  /* const allHouse = [
     {
       id: "1",
       name: "Anishur Rahman",
@@ -170,7 +170,7 @@ const StateProvider = ({ children }) => {
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium ab consequatur assumenda quidem exercitationem rem quam id repellendus, eligendi doloremque?",
       map: map,
     },
-  ];
+  ]; */
 
   useEffect(() => {
     if (user?.uid) {
@@ -190,6 +190,23 @@ const StateProvider = ({ children }) => {
   }, [user]);
 
   console.log("userInfo", userInfo);
+
+  const [allHouse, setAllHouse] = useState([]);
+
+  useEffect(() => {
+    if (userInfo?.id !== undefined) {
+      // Check if userInfo?.id is not undefined
+      fetch(`${import.meta.env.VITE_SERVER_URL}/properties/getAll`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setAllHouse(data))
+        .catch((err) => console.log(err));
+    }
+  }, [userInfo]);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 

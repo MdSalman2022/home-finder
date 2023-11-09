@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import HouseCard from "./HouseCard";
 import HouseDetails from "./HouseDetails";
 import { StateContext } from "../../../contexts/StateProvider";
 
 const HouseList = () => {
-  const { allHouse } = useContext(StateContext);
+  const { userInfo, allHouse } = useContext(StateContext);
 
   const [showHouse, setShowHouse] = useState(false);
   const [selectedHouse, setSelectedHouse] = useState({});

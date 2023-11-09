@@ -18,8 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Header = () => {
-  const { providerLogin, user, logOut } = useContext(AuthContext);
-  const { setIsCreateModalOpen, isCreateModalOpen } = useContext(StateContext);
+  const { user, logOut,googleLogIn } = useContext(AuthContext); 
 
   const navlinks = [
     {
@@ -49,56 +48,6 @@ const Header = () => {
 
   console.log("pathname", pathname);
 
-  const searchUser = async (user) => {
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/users/getUserById?uid=${user.uid}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const data = await response.json();
-    return data;
-  };
-
-  const googleLogIn = async (event) => {
-    event.preventDefault();
-    const googleProvider = new GoogleAuthProvider();
-    try {
-      const result = await providerLogin(googleProvider);
-      const user = result.user;
-
-      console.log("user", user);
-      const found = await searchUser(user);
-      console.log("found", found);
-      if (found.user?.length < 1) {
-        const newUser = {
-          uid: user.uid,
-          name: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-        };
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/users/create`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newUser),
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-      }
-
-      // const result = await sendToServer(data, user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <div

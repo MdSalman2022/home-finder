@@ -113,28 +113,26 @@ const HouseDetails = ({ house }) => {
 
   console.log("propertyInfoObject", propertyInfoObject);
 
+  console.log("house details", house);
+
   return (
     <div>
       <div className="md:grid grid-cols-3 gap-5">
         <div className="col-span-2">
           <div className="flex items-center justify-between py-5">
             <div className="flex flex-col">
-              <p className="text-xl font-semibold">
-                Property of {house?.name || house?.Name}
-              </p>
+              <p className="text-xl font-semibold">Property of {house?.Name}</p>
               <div className="flex items-center gap-1">
-                <p>{house?.bedroom || propertyInfoObject?.Bed} Bedrooms </p>
+                <p>{propertyInfoObject?.Bed} Bedrooms </p>
                 <span>·</span>
-                <span>
-                  {house?.bathroom || propertyInfoObject?.Bathroom} Bathrooms
-                </span>
+                <span>{propertyInfoObject?.Bathroom} Bathrooms</span>
                 <span>·</span>
-                <span>{house?.balcony || 1} Balcony</span>
+                <span>{1} Balcony</span>
               </div>
             </div>
             <img
               className="w-14 h-14 rounded-full object-cover"
-              src={avatar}
+              src={house?.ownerPhoto || avatar}
               alt=""
             />
           </div>
@@ -153,19 +151,10 @@ const HouseDetails = ({ house }) => {
                 </div>
               ))}
             </div>
-            <span className="pt-10">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam
-              perspiciatis illo velit quia debitis consequuntur cupiditate
-              aliquam, est veniam dignissimos ullam ratione. Exercitationem
-              animi unde ut praesentium! Natus saepe non sapiente, voluptatem
-              consequatur suscipit dolor in rem alias aut totam. Dolorem,
-              molestias? Officia in id asperiores tempora velit cupiditate. Quis
-              blanditiis ea omnis nulla eius fugit provident officia aspernatur
-              assumenda alias repellendus tenetur eos et numquam laboriosam,
-              modi magni voluptatem reprehenderit atque. Itaque eum aliquid
-              quia? Accusantium dolore possimus dolorum eligendi! Reiciendis
-              natus commodi culpa expedita odio fugit ipsam cumque voluptate in,
-              omnis cupiditate odit assumenda quod nostrum vitae nobis?
+            <span className="pb-5">
+              <p className="font-semibold">Description</p>
+
+              {house?.Description}
             </span>
             <div>
               <p className="text-2xl font-semibold">Property Information</p>

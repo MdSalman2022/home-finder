@@ -2,54 +2,41 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { StateContext } from "../../../contexts/StateProvider";
 
-const Herosection = ({}) => {
-  const { allHouse } = useContext(StateContext);
-  const { id } = useParams();
-  const [house, setHouse] = useState({});
-
-  console.log("allHouse", allHouse);
-  console.log("id", id);
-
-  useEffect(() => {
-    if (id && allHouse?.length > 0) {
-      console.log(
-        "find",
-        allHouse.map((house) => house.id === id)
-      );
-      setHouse(allHouse.find((house) => house.id === id));
-    }
-  }, [allHouse, id]);
-
+const Herosection = ({ house }) => {
   console.log("house", house);
-  console.log("house name", house?.name);
+
+  const imagesArray =
+    (house?.Images && JSON.parse(house?.Images.replace(/\\/g, ""))) || [];
+  console.log("imagesArray", imagesArray);
+
   return (
-    <div className="flex flex-col md:grid md:grid-cols-3 gap-3 md:h-[600px]">
+    <div className="flex flex-col md:grid md:grid-cols-3 gap-3 md:h-[500px]">
       <img
-        className="md:h-[600px] w-full object-cover rounded-l-xl"
-        src={house?.name && house?.images[0]}
+        className="md:h-[500px] w-full object-cover rounded-l-xl"
+        src={house?.Name && imagesArray[0]}
         alt=""
       />
       <div className="flex flex-col gap-3">
         <img
-          className="h-[293px] object-cover"
-          src={house?.name && house?.images[1]}
+          className="h-[244px] object-cover"
+          src={house?.Name && imagesArray[1]}
           alt=""
         />
         <img
-          className="h-[293px] object-cover"
-          src={house?.name && house?.images[2]}
+          className="h-[244px] object-cover"
+          src={house?.Name && imagesArray[2]}
           alt=""
         />
       </div>
       <div className="flex flex-col gap-3">
         <img
-          className="h-[293px] object-cover rounded-se-xl"
-          src={house?.name && house?.images[3]}
+          className="h-[244px] object-cover rounded-se-xl"
+          src={house?.Name && imagesArray[3]}
           alt=""
         />
         <img
-          className="h-[293px] object-cover rounded-ee-xl"
-          src={house?.name && house?.images[4]}
+          className="h-[244px] object-cover rounded-ee-xl"
+          src={house?.Name && imagesArray[4]}
           alt=""
         />
       </div>
