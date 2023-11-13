@@ -37,10 +37,10 @@ const HousePage = () => {
 
   return (
     <div className="container-sm mx-auto space-y-3 px-3 md:px-0">
-      <p className="text-3xl font-medium">{house?.Name}</p>
-
       <div className="flex justify-between w-full">
-        <div className="flex items-center gap-2">
+        <p className="text-3xl font-medium">{house?.Location}</p>
+
+        {/*  <div className="flex items-center gap-2">
           <span className="flex items-center gap-1">
             {" "}
             <FaStar /> 5.00
@@ -49,7 +49,7 @@ const HousePage = () => {
           <span>308</span>
           <span>·</span>
           <span>{house?.location}</span>
-        </div>
+        </div> */}
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1">
             <FiShare /> Share

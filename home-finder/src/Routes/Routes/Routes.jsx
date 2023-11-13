@@ -12,6 +12,7 @@ import PersionalInfo from "@/components/Main/AccountPage/PersionalInfo";
 import Properties from "@/components/Main/AccountPage/Properties";
 import RentManagement from "@/components/Main/AccountPage/RentManagement";
 import Settings from "@/components/Main/AccountPage/Settings";
+import FavoritesPage from "@/components/Main/AccountPage/FavoritesPage";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: "/account/properties",
         element: <Properties />,
+      },
+      {
+        path: "/account/favorites",
+        element: <FavoritesPage />,
       },
       {
         path: "/account/settings",

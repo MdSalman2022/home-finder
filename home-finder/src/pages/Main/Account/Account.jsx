@@ -5,7 +5,11 @@ import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { GrShieldSecurity } from "react-icons/gr";
 import { IoSettingsOutline } from "react-icons/io5";
 import { LiaIdCard } from "react-icons/lia";
-import { MdOutlineAddHome, MdOutlinePayments } from "react-icons/md";
+import {
+  MdOutlineAddHome,
+  MdOutlineFavoriteBorder,
+  MdOutlinePayments,
+} from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const Account = () => {
@@ -29,6 +33,12 @@ const Account = () => {
       name: "My Properties",
       description: "Add a new property for rent.",
       link: "properties",
+    },
+    {
+      icon: <MdOutlineFavoriteBorder />,
+      name: "Favorites",
+      description: "View your favorites.",
+      link: "favorites",
     },
     {
       icon: <IoSettingsOutline />,
