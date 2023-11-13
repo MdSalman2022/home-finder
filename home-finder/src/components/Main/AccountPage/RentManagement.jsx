@@ -108,6 +108,12 @@ const RentManagement = () => {
       </div>
 
       <div>
+        <p>Property From: Atikur Rahman</p>
+        <p>Location: Kazipara, Mirpur, Dhaka</p>
+        <p>Base Rent: 16000tk </p>
+      </div>
+
+      <div>
         <div className="text-4xl font-bold">2023</div>
         <Table>
           <TableHeader>

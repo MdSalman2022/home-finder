@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { FaSearch } from "react-icons/fa";
 import Dropdown from "../Dropdown";
 import inputArray from "@/assets/data";
 import bg from "@/assets/bg.png";
+import { StateContext } from "@/contexts/StateProvider";
+import { GrPowerReset } from "react-icons/gr";
+import { RxReset } from "react-icons/rx";
+import toast from "react-hot-toast";
 
 const Herosection = () => {
+  const { filteredProperties, setFilteredProperties } =
+    useContext(StateContext);
   const allCities = inputArray.map((item) => item.City);
 
   // console.log("allCities", allCities);
@@ -13,13 +19,11 @@ const Herosection = () => {
   const [selectedAreas, setSelectedAreas] = useState([]);
   const [selectedArea, setSelectedArea] = useState("Mirpur");
 
-  // console.log("selectedAreas", selectedAreas);
-
-  // Function to handle city selection
   useEffect(() => {
     const cityObject = inputArray.find((city) => city?.City === selectedCity);
 
     if (cityObject) {
+      setSelectedArea(cityObject.Area[0]);
       setSelectedAreas(cityObject.Area);
     } else {
       setSelectedAreas([]);
@@ -42,11 +46,51 @@ const Herosection = () => {
 
   console.log("selectedCity", selectedCity);
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    console.log("searched");
+    const form = e.target;
+    const budget = form.budget.value;
+    const district = selectedCity;
+    const thana = selectedArea;
+    const propertyType = selectedBhk;
+
+    const payload = {
+      maxRent: budget || 1000000,
+      district,
+      thana,
+      propertyType,
+    };
+
+    console.log("payload", payload);
+
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/properties/filterProperties`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const res = await response.json();
+    console.log("res", res);
+
+    setFilteredProperties(res);
+  };
+
+  console.log("filteredProperties", filteredProperties);
+
   return (
     <div className="flex justify-center">
-      <div className="bg-gradient-to-r from-blue-500 to-blue-800 w-full md:w-[95vw] md:h-[50vh] md:rounded-3xl relative">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-800 w-full md:w-[95vw] md:h-[50vh] md:rounded-xl 2xl:rounded-3xl relative">
         <div
-          className="absolute right-10 h-full hidden md:flex justify-end"
+          className="absolute md:right-2 2xl:right-10 h-full hidden md:flex justify-end"
           style={{
             clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)",
           }}
@@ -66,7 +110,10 @@ const Herosection = () => {
               </p>
             </div>
 
-            <div className="p-5 bg-white rounded-lg shadow-lg flex flex-wrap md:flex-nowrap items-end justify-between gap-2 md:gap-10">
+            <form
+              onSubmit={handleSearch}
+              className="p-5 bg-white rounded-lg shadow-lg flex flex-wrap md:flex-nowrap items-end justify-between gap-2 md:gap-10"
+            >
               <div className="flex flex-col gap-2">
                 <p className="font-bold text-xl">District</p>
                 <Dropdown
@@ -76,7 +123,7 @@ const Herosection = () => {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <p className="font-bold text-xl">City</p>
+                <p className="font-bold text-xl">Thana</p>
                 <Dropdown
                   items={selectedAreas}
                   onSelect={handleSelectArea}
@@ -92,13 +139,33 @@ const Herosection = () => {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <p className="font-bold text-xl">Budget</p>
-                <input type="text" className="input-box w-full" />
+                <p className="font-bold text-xl">Maximum Budget</p>
+                <input
+                  type="number"
+                  name="budget"
+                  className="input-box w-full"
+                  placeholder="20000"
+                />
               </div>
-              <div className="primary-outline-btn h-fit w-14 md:w-auto flex justify-center">
-                <FaSearch />
+              <div className="flex flex-col gap-1">
+                {(filteredProperties?.properties?.length > 0 ||
+                  filteredProperties?.issue === "No property found") && (
+                  <a
+                    name="reset"
+                    onClick={() => setFilteredProperties([])}
+                    className="primary-outline-btn border-red-600 hover:bg-red-800 text-red-600 hover:text-white h-fit w-14 md:w-auto flex justify-center"
+                  >
+                    <RxReset />
+                  </a>
+                )}
+                <button
+                  name="submit"
+                  className="primary-outline-btn h-fit w-14 md:w-auto flex justify-center"
+                >
+                  <FaSearch />
+                </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

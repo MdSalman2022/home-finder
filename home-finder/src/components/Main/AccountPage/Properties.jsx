@@ -9,6 +9,8 @@ import { toast } from "react-hot-toast";
 import RentedByCard from "./RentedByCard";
 import { BiImageAdd } from "react-icons/bi";
 import { useQuery } from "@tanstack/react-query";
+import inputArray from "@/assets/data";
+import Dropdown from "../Dropdown";
 
 const Properties = () => {
   const { user } = useContext(AuthContext);
@@ -22,6 +24,40 @@ const Properties = () => {
   const [showRentInfo, setShowRentInfo] = useState(false);
 
   const { setIsCreateModalOpen, isCreateModalOpen } = useContext(StateContext);
+
+  const allCities = inputArray.map((item) => item.City);
+
+  // console.log("allCities", allCities);
+
+  const [selectedCity, setSelectedCity] = useState("Dhaka");
+  const [selectedAreas, setSelectedAreas] = useState([]);
+  const [selectedArea, setSelectedArea] = useState("Mirpur");
+  
+
+  const bhks = ["1 Bhk", "2 Bhk", "3 Bhk", "4 Bhk", "5 Bhk"];
+  
+  useEffect(() => {
+    const cityObject = inputArray.find((city) => city?.City === selectedCity);
+
+    if (cityObject) {
+      setSelectedArea(cityObject.Area[0])
+      setSelectedAreas(cityObject.Area);
+    } else {
+      setSelectedAreas([]);
+    }
+  }, [selectedCity]);
+
+  const [selectedBhk, setSelectedBhk] = useState("3 Bhk");
+
+  const handleSelectBhk = (item) => { 
+    setSelectedBhk(item);
+  };
+  const handleSelect = (item) => { 
+    setSelectedCity(item);
+  };
+  const handleSelectArea = (item) => {
+    setSelectedArea(item);
+  };
 
   // const [myProperties, setMyProperties] = useState([]);
 
@@ -54,27 +90,7 @@ const Properties = () => {
     cacheTime: 2 * (60 * 1000), // cache data for 2 minutes
     staleTime: 1 * (60 * 1000), // consider data fresh for 1 minutes
   });
-
-  /*  useEffect(() => {
-    if (userInfo?.id !== undefined) {
-      // Check if userInfo?.id is not undefined
-      console.log("called", userInfo?.id, myProperties);
-      fetch(
-        `${import.meta.env.VITE_SERVER_URL}/properties/getPropertiesById?id=${
-          userInfo?.id
-        }`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => setMyProperties(data))
-        .catch((err) => console.log(err));
-    }
-  }, [userInfo]); */
+ 
 
   console.log("myProperties", myProperties);
 
@@ -84,6 +100,9 @@ const Properties = () => {
     const form = e.target;
     const description = form.description.value;
     const location = form.location.value;
+    const thana = selectedArea
+    const district = selectedCity
+    const propertyType = selectedBhk;
     const price = form.price.value;
     const area = form.area.value;
     const bed = form.bed.value;
@@ -97,6 +116,9 @@ const Properties = () => {
       Features: "",
       Images: JSON.stringify(heroImages),
       Location: location,
+      thana: thana,
+      district: district,
+      propertyType: propertyType,
       PostedBy: userInfo?.id,
       FloorPlanImage: floorPlanImage,
       PropertyInfo: {
@@ -128,6 +150,8 @@ const Properties = () => {
       setIsCreateModalOpen(false);
       refetchAllHouse();
       refetchMyProperties();
+      setHeroImages([]);
+      setSelectedImages([]);
       return data?.notifications;
     } else {
       console.log("Failed to create property");
@@ -203,6 +227,8 @@ const Properties = () => {
     }
   };
 
+  console.log("userInfo",userInfo)
+
   return (
     <div className="container-sm mx-auto min-h-screen">
       <ModalBox
@@ -248,17 +274,7 @@ const Properties = () => {
             <form
               onSubmit={handleAddProperty}
               className="flex flex-col gap-1 2xl:gap-5 w-full p-2 2xl:p-5"
-            >
-              <label htmlFor="">
-                <span className="text-sm">Name</span>
-                <input
-                  type="text"
-                  name="name"
-                  defaultValue={userInfo?.name}
-                  className="input-box w-full"
-                  readOnly
-                />
-              </label>
+            > 
               <label htmlFor="">
                 <span className="text-sm">Description</span>
                 <textarea
@@ -267,6 +283,33 @@ const Properties = () => {
                   className="input-box w-full"
                 />
               </label>
+              <div className="flex justify-between gap-3">
+              <label htmlFor="" className="flex gap-5 items-center">
+                <span className="text-sm">District</span>
+                <Dropdown
+                  items={allCities}
+                  onSelect={handleSelect}
+                  selectedItem={selectedCity}
+                /> 
+              </label>
+              <label htmlFor="" className="flex gap-5 items-center">
+                <span className="text-sm">Thana</span>
+                <Dropdown
+                  items={selectedAreas}
+                  onSelect={handleSelectArea}
+                  selectedItem={selectedArea}
+                />
+              </label>
+              <label htmlFor="" className="flex gap-5 items-center">
+                <span className="text-sm">Property Type</span>
+                <Dropdown
+                  items={bhks}
+                  onSelect={handleSelectBhk}
+                  selectedItem={selectedBhk}
+                />
+              </label>
+              </div>
+             
               <label htmlFor="">
                 <span className="text-sm">Address</span>
                 <input
@@ -274,7 +317,8 @@ const Properties = () => {
                   name="location"
                   className="input-box w-full"
                 />
-              </label>
+              </label> 
+
               <label htmlFor="">
                 <span className="text-sm">Price (Tk) </span>
                 <input
@@ -321,12 +365,22 @@ const Properties = () => {
               showRentInfo ? "col-span-3 grid-cols-2" : "col-span-3 grid-cols-3"
             }    gap-5`}
           >
-            <div
+           {myProperties?.length > 0 ?
+           <div
               onClick={() => setIsCreateModalOpen(true)}
               className="w-full h-full shadow-lg rounded-lg flex flex-col justify-center items-center cursor-pointer"
             >
               <MdOutlineAddHome className="text-9xl" />
-            </div>
+           </div>
+           :
+           <div
+              onClick={() => setIsCreateModalOpen(true)}
+              className="w-80 h-80 shadow-lg rounded-lg flex flex-col justify-center items-center cursor-pointer"
+            >
+              <MdOutlineAddHome className="text-9xl" />
+           </div>
+           
+          }
 
             {myProperties?.map((house, index) => (
               <div className="" key={index}>

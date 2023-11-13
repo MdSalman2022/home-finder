@@ -13,6 +13,8 @@ export const StateContext = createContext();
 const StateProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState({});
+  
+  const [filteredProperties, setFilteredProperties] = useState([]);
 
   /* const allHouse = [
     {
@@ -245,6 +247,8 @@ const StateProvider = ({ children }) => {
     userInfo,
     refetchAllHouse,
     isAllHouseLoading,
+    filteredProperties, 
+    setFilteredProperties
   };
 
   return (

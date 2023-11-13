@@ -26,20 +26,20 @@ const HouseDetails = ({ selectedHouse }) => {
   return (
     <div className="sticky top-10 flex flex-col gap-2 shadow-lg p-5 rounded-xl">
       <p className="font-semibold">Property Quick view</p>
-      <div className="flex flex-col gap-0">
+      <div className="flex flex-col gap-2">
         <img
-          className="h-[200px] object-cover"
+          className="h-[200px] object-cover rounded"
           src={selectedHouse?.Images?.length > 0 ? imagesArray[0] : room1}
           alt=""
         />
         <div className="grid grid-cols-2 gap-x-2">
           <img
-            className="h-[100px] w-full object-cover"
+            className="h-[100px] w-full object-cover rounded"
             src={selectedHouse?.Images?.length > 0 ? imagesArray[1] : room2}
             alt=""
           />
           <img
-            className="h-[100px] w-full object-cover"
+            className="h-[100px] w-full object-cover rounded"
             src={selectedHouse?.Images?.length > 0 ? imagesArray[2] : room3}
             alt=""
           />
