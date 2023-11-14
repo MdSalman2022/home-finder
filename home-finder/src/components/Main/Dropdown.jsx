@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 
-function Dropdown({ items, onSelect, selectedItem }) {
+function Dropdown({ items, onSelect, selectedItem, defaultItem }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -15,7 +15,11 @@ function Dropdown({ items, onSelect, selectedItem }) {
 
   // console.log(items);
 
-  // console.log("items", items);
+  console.log("items dropdown", items);
+
+  console.log("selectedItem dropdown", selectedItem);
+
+  console.log("defaultItem", defaultItem);
 
   return (
     <div className="relative inline-block text-left">
@@ -24,7 +28,7 @@ function Dropdown({ items, onSelect, selectedItem }) {
         className="cursor-pointer flex items-center justify-between w-full border rounded-lg h-10"
       >
         <span className="inline-flex justify-start w-full px-2 pr-8 py-1 text-sm font-medium text-[#103ADC]  bg-white rounded-md">
-          {selectedItem}
+          {selectedItem ? selectedItem : defaultItem}
         </span>
         <span
           className={`transition-all duration-300 absolute right-2 z-[200] text-[#103ADC] ${

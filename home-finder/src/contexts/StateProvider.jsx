@@ -13,7 +13,7 @@ export const StateContext = createContext();
 const StateProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState({});
-  
+
   const [filteredProperties, setFilteredProperties] = useState([]);
 
   /* const allHouse = [
@@ -224,20 +224,65 @@ const StateProvider = ({ children }) => {
     staleTime: 5 * (60 * 1000), // consider data fresh for 5 minutes
   });
 
-  /*   useEffect(() => {
-    if (userInfo?.id !== undefined) {
-      fetch(`${import.meta.env.VITE_SERVER_URL}/properties/getAll`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => setAllHouse(data))
-        .catch((err) => console.log(err));
-    }
-  }, [userInfo]); */
+  const {
+    data: myProperties = [],
+    refetch: refetchMyProperties,
+    isLoading: isMyPropertiesLoading,
+    error: myPropertiesError,
+  } = useQuery({
+    queryKey: (userInfo?.id !== undefined && ["myProperties", userInfo]) || [],
+    queryFn: async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/properties/getPropertiesById?id=${
+          userInfo?.id
+        }`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return response.json();
+    },
+    cacheTime: 2 * (60 * 1000), // cache data for 2 minutes
+    staleTime: 1 * (60 * 1000), // consider data fresh for 1 minutes
+  });
+
+  const {
+    data: products = [],
+    refetch: refetchProducts,
+    isLoading: isProductsLoading,
+    error: isProductsError,
+  } = useQuery({
+    queryKey: ["products"] || [],
+    queryFn: async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/products/getProducts`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return response.json();
+    },
+    cacheTime: 2 * (60 * 1000), // cache data for 2 minutes
+    staleTime: 1 * (60 * 1000), // consider data fresh for 1 minutes
+  });
+
+  console.log("products", products);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const stateInfo = {
@@ -247,8 +292,11 @@ const StateProvider = ({ children }) => {
     userInfo,
     refetchAllHouse,
     isAllHouseLoading,
-    filteredProperties, 
-    setFilteredProperties
+    filteredProperties,
+    setFilteredProperties,
+    myProperties,
+    refetchMyProperties,
+    products,
   };
 
   return (

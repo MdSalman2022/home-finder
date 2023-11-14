@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoBedSharp } from "react-icons/io5";
 import { BiSolidBath } from "react-icons/bi";
 import { BsFillHouseDoorFill } from "react-icons/bs";
@@ -6,6 +6,10 @@ import { FaLocationDot } from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import room1 from "@/assets/room1.webp";
 import rentimg from "@/assets/rented.png";
+import { AiOutlineEdit } from "react-icons/ai";
+import EditProperties from "../AccountPage/EditProperties";
+import DeleteProperty from "../AccountPage/DeleteProperty";
+import { RiDeleteBin7Line } from "react-icons/ri";
 
 const HouseCard = ({
   house,
@@ -28,30 +32,76 @@ const HouseCard = ({
 
   console.log("house card house", house);
 
+  const isPropertiesPage = pathname === "/account/properties";
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   return (
     <div className="rounded-xl p-4 w-full shadow-lg bg-white">
-      <Link to={`/house/${house?.pid}`}>
-        <div className="relative flex justify-center">
-          {house?.Status === "Reserved" && (
+      {isPropertiesPage && (
+        <EditProperties
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          selectedHouse={selectedHouse}
+        />
+      )}
+      {isPropertiesPage && (
+        <DeleteProperty
+          isDeleteModalOpen={isDeleteModalOpen}
+          setIsDeleteModalOpen={setIsDeleteModalOpen}
+          selectedHouse={selectedHouse}
+        />
+      )}
+
+      <div className="relative">
+        <Link to={`/house/${house?.pid}`}>
+          <div className="relative flex justify-center">
+            {house?.Status === "Reserved" && (
+              <img
+                className="absolute h-60 w-60 object-contain"
+                src={rentimg}
+                alt=""
+              />
+            )}
             <img
-              className="absolute h-60 w-60 object-contain"
-              src={rentimg}
+              src={house?.Images?.length > 0 ? imagesArray[0] : room1}
               alt=""
+              className="h-[250px] w-full rounded-2xl object-cover"
             />
-          )}
-          <img
-            src={house?.Images?.length > 0 ? imagesArray[0] : room1}
-            alt=""
-            className="h-[250px] w-full rounded-2xl object-cover"
-          />
-        </div>
-      </Link>
+          </div>
+        </Link>
+        {isPropertiesPage && (
+          <span
+            onClick={() => {
+              setSelectedHouse(house);
+              setIsModalOpen(true);
+            }}
+            className="cursor-pointer"
+          >
+            {" "}
+            <AiOutlineEdit className="absolute top-3 right-3 w-9 h-9 p-1 transition-all duration-300 bg-white hover:text-white hover:border-white border border-black hover:bg-black rounded text-3xl" />
+          </span>
+        )}
+        {isPropertiesPage && (
+          <span
+            onClick={() => {
+              setSelectedHouse(house);
+              setIsDeleteModalOpen(true);
+            }}
+            className="cursor-pointer"
+          >
+            {" "}
+            <RiDeleteBin7Line className="absolute top-3 left-3 w-9 h-9 p-1 transition-all duration-300 text-red-600 hover:text-white border border-red-600 hover:border-white bg-white hover:bg-red-800  rounded text-3xl" />
+          </span>
+        )}
+      </div>
       <div className="flex flex-col gap-3 mt-5">
         <div className="flex justify-between">
           <p className="text-2xl font-bold">
             ৳ {house?.price || house?.RentFee}
           </p>
-          <p>{house?.Status === "Reserved" && "Rented"}</p>
+          {/* <p>{house?.Status === "Reserved" && "Rented"}</p> */}
         </div>
         <div className="flex justify-between w-full">
           <div className="flex flex-col text-sm">
