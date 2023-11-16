@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoBedSharp } from "react-icons/io5";
 import { BiSolidBath } from "react-icons/bi";
 import { BsFillHouseDoorFill } from "react-icons/bs";
@@ -9,7 +9,9 @@ import rentimg from "@/assets/rented.png";
 import { AiOutlineEdit } from "react-icons/ai";
 import EditProperties from "../AccountPage/EditProperties";
 import DeleteProperty from "../AccountPage/DeleteProperty";
-import { RiDeleteBin7Line } from "react-icons/ri";
+import { RiDeleteBin7Line, RiHeartLine } from "react-icons/ri";
+import toast from "react-hot-toast";
+import { StateContext } from "@/contexts/StateProvider";
 
 const HouseCard = ({
   house,
@@ -20,6 +22,7 @@ const HouseCard = ({
   setShowRentInfo,
   showRentInfo,
 }) => {
+  const { userInfo } = useContext(StateContext);
   const { pathname } = useLocation();
 
   const propertyInfoObject = JSON.parse(house?.PropertyInfo || "{}");
@@ -36,6 +39,29 @@ const HouseCard = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleBookmark = () => {
+    const payload = {
+      id: house?.pid,
+      userId: userInfo?.id,
+    };
+
+    fetch(`${import.meta.env.VITE_SERVER_URL}/properties/bookmarkProperty`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("data", data);
+        toast.success("Added to bookmark");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const [favorite, setFavorite] = useState(false);
 
   return (
     <div className="rounded-xl p-4 w-full shadow-lg bg-white">
@@ -71,6 +97,15 @@ const HouseCard = ({
             />
           </div>
         </Link>
+        <span
+          onClick={() => {
+            handleBookmark();
+            setFavorite(!favorite);
+          }}
+          className="absolute top-3 right-3 text-white text-3xl cursor-pointer hover:scale-110 transition-all duration-300"
+        >
+          <RiHeartLine />
+        </span>
         {isPropertiesPage && (
           <span
             onClick={() => {

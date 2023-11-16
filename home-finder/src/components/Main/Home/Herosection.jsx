@@ -7,6 +7,16 @@ import { StateContext } from "@/contexts/StateProvider";
 import { GrPowerReset } from "react-icons/gr";
 import { RxReset } from "react-icons/rx";
 import toast from "react-hot-toast";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 
 const Herosection = () => {
   const { filteredProperties, setFilteredProperties } =
@@ -18,6 +28,9 @@ const Herosection = () => {
   const [selectedCity, setSelectedCity] = useState("Dhaka");
   const [selectedAreas, setSelectedAreas] = useState([]);
   const [selectedArea, setSelectedArea] = useState("Mirpur");
+  const [selectFavorite, setSelectFavorite] = useState(0);
+
+  console.log("selectFavorite", selectFavorite);
 
   useEffect(() => {
     const cityObject = inputArray.find((city) => city?.City === selectedCity);
@@ -31,6 +44,8 @@ const Herosection = () => {
   }, [selectedCity]);
 
   const [selectedBhk, setSelectedBhk] = useState("3 Bhk");
+
+  console.log("selectedBhk", selectedBhk);
 
   const handleSelectBhk = (item) => {
     setSelectedBhk(item);
@@ -50,16 +65,20 @@ const Herosection = () => {
     e.preventDefault();
     console.log("searched");
     const form = e.target;
-    const budget = form.budget.value;
+    const maxBudget = form.maxBudget.value;
+    const minBudget = form.minBudget.value;
     const district = selectedCity;
     const thana = selectedArea;
     const propertyType = selectedBhk;
+    const favoriteCount = parseInt(selectFavorite);
 
     const payload = {
-      maxRent: budget || 1000000,
+      maxRent: maxBudget || 1000000,
+      minRent: minBudget || 0,
       district,
       thana,
       propertyType,
+      favoriteCount,
     };
 
     console.log("payload", payload);
@@ -85,6 +104,9 @@ const Herosection = () => {
   };
 
   console.log("filteredProperties", filteredProperties);
+  console.log("selectedArea", selectedArea);
+
+  const favorites = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
     <div className="flex justify-center">
@@ -112,40 +134,122 @@ const Herosection = () => {
 
             <form
               onSubmit={handleSearch}
-              className="p-5 bg-white rounded-lg shadow-lg flex flex-wrap md:flex-nowrap items-end justify-between gap-2 md:gap-10"
+              className="p-5 bg-white z-[300] rounded-lg shadow-lg flex flex-wrap md:flex-nowrap items-end justify-between gap-2 md:gap-5"
             >
               <div className="flex flex-col gap-2">
-                <p className="font-bold text-xl">District</p>
-                <Dropdown
+                <p className="font-bold text-lg">District</p>
+                <Select
+                  onValueChange={(value) => setSelectedCity(value)}
+                  className="w-[150px]"
+                >
+                  <SelectTrigger className="w-[150px]">
+                    <SelectValue placeholder="Select a District" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {allCities.map((item, index) => (
+                        <SelectItem key={index} value={item}>
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {/* <Dropdown
                   items={allCities}
                   onSelect={handleSelect}
                   selectedItem={selectedCity}
-                />
+                /> */}
               </div>
               <div className="flex flex-col gap-2">
-                <p className="font-bold text-xl">Thana</p>
-                <Dropdown
+                <p className="font-bold text-lg">Thana</p>
+                <Select
+                  onValueChange={(value) => setSelectedArea(value)}
+                  className="w-[150px]"
+                >
+                  <SelectTrigger className="w-[150px]">
+                    <SelectValue placeholder="Select a Thana" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {selectedAreas.map((item, index) => (
+                        <SelectItem key={index} value={item}>
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {/*    <Dropdown
                   items={selectedAreas}
                   onSelect={handleSelectArea}
                   selectedItem={selectedArea}
-                />
+                /> */}
               </div>{" "}
               <div className="flex flex-col gap-2">
-                <p className="font-bold text-xl">Property Type</p>
-                <Dropdown
+                <p className="font-bold text-lg">Property Type</p>
+                <Select
+                  onValueChange={(value) => setSelectedBhk(value)}
+                  className="w-[150px]"
+                >
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="Bhk" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {bhks.map((item, index) => (
+                        <SelectItem key={index} value={item}>
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {/* <Dropdown
                   items={bhks}
                   onSelect={handleSelectBhk}
                   selectedItem={selectedBhk}
-                />
+                /> */}
               </div>
-              <div className="flex flex-col gap-2">
-                <p className="font-bold text-xl">Maximum Budget</p>
-                <input
-                  type="number"
-                  name="budget"
-                  className="input-box w-full"
-                  placeholder="20000"
-                />
+              <div className="flex gap-5">
+                <div className="flex flex-col gap-1">
+                  <p className="font-bold text-lg">Min</p>
+                  <input
+                    type="number"
+                    name="minBudget"
+                    className="input-box w-28"
+                    placeholder="10000"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <p className="font-bold text-lg">Max</p>
+                  <input
+                    type="number"
+                    name="maxBudget"
+                    className="input-box w-28"
+                    placeholder="20000"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <p className="font-bold text-lg">Likes</p>
+                  <Select
+                    onValueChange={(value) => setSelectFavorite(value)}
+                    className="w-[150px]"
+                  >
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Likes" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {favorites.map((item, index) => (
+                          <SelectItem key={index} value={item}>
+                            {item}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="flex flex-col gap-1">
                 {(filteredProperties?.properties?.length > 0 ||
@@ -153,14 +257,14 @@ const Herosection = () => {
                   <a
                     name="reset"
                     onClick={() => setFilteredProperties([])}
-                    className="primary-outline-btn border-red-600 hover:bg-red-800 text-red-600 hover:text-white h-fit w-14 md:w-auto flex justify-center"
+                    className="primary-outline-btn border-red-600 hover:bg-red-800 text-red-600 hover:text-white h-10 w-14 md:w-auto flex justify-center items-center"
                   >
                     <RxReset />
                   </a>
                 )}
                 <button
                   name="submit"
-                  className="primary-outline-btn h-fit w-14 md:w-auto flex justify-center"
+                  className="primary-outline-btn h-10 w-14 md:w-auto flex justify-center items-center"
                 >
                   <FaSearch />
                 </button>
