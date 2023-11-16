@@ -9,7 +9,7 @@ import rentimg from "@/assets/rented.png";
 import { AiOutlineEdit } from "react-icons/ai";
 import EditProperties from "../AccountPage/EditProperties";
 import DeleteProperty from "../AccountPage/DeleteProperty";
-import { RiDeleteBin7Line, RiHeartLine } from "react-icons/ri";
+import { RiDeleteBin7Line, RiHeartFill, RiHeartLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { StateContext } from "@/contexts/StateProvider";
 
@@ -22,7 +22,7 @@ const HouseCard = ({
   setShowRentInfo,
   showRentInfo,
 }) => {
-  const { userInfo } = useContext(StateContext);
+  const { userInfo, refetchAllHouse } = useContext(StateContext);
   const { pathname } = useLocation();
 
   const propertyInfoObject = JSON.parse(house?.PropertyInfo || "{}");
@@ -57,11 +57,14 @@ const HouseCard = ({
       .then((data) => {
         console.log("data", data);
         toast.success("Added to bookmark");
+        refetchAllHouse();
       })
       .catch((err) => console.log(err));
   };
 
-  const [favorite, setFavorite] = useState(false);
+  const bookmarkedUsersArray = JSON.parse(house?.BookmarkedByUsers || "[]");
+
+  console.log("bookmarkedUsersArray", bookmarkedUsersArray);
 
   return (
     <div className="rounded-xl p-4 w-full shadow-lg bg-white">
@@ -100,11 +103,14 @@ const HouseCard = ({
         <span
           onClick={() => {
             handleBookmark();
-            setFavorite(!favorite);
           }}
           className="absolute top-3 right-3 text-white text-3xl cursor-pointer hover:scale-110 transition-all duration-300"
         >
-          <RiHeartLine />
+          {bookmarkedUsersArray?.includes(userInfo?.id) ? (
+            <RiHeartFill className="text-red-600" />
+          ) : (
+            <RiHeartLine />
+          )}
         </span>
         {isPropertiesPage && (
           <span
