@@ -134,7 +134,7 @@ const Herosection = () => {
 
             <form
               onSubmit={handleSearch}
-              className="p-5 bg-white z-[300] rounded-lg shadow-lg flex flex-wrap md:flex-nowrap items-end justify-between gap-2 md:gap-5"
+              className="p-5 bg-white z-[40] rounded-lg shadow-lg flex flex-wrap md:flex-nowrap items-end justify-between gap-2 md:gap-5"
             >
               <div className="flex flex-col gap-2">
                 <p className="font-bold text-lg">District</p>
