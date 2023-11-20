@@ -230,14 +230,16 @@ const Herosection = () => {
                     placeholder="20000"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 text-black">
                   <p className="font-bold text-lg">Likes</p>
                   <Select
                     onValueChange={(value) => setSelectFavorite(value)}
                     className="w-[150px]"
                   >
                     <SelectTrigger className="w-[120px]">
-                      <SelectValue placeholder="Likes" />
+                      <SelectValue placeholder="Likes">
+                        {selectFavorite !== 0 ? selectFavorite : "Likes"}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
