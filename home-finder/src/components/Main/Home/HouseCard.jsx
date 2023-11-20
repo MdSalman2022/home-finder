@@ -12,6 +12,7 @@ import DeleteProperty from "../AccountPage/DeleteProperty";
 import { RiDeleteBin7Line, RiHeartFill, RiHeartLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { StateContext } from "@/contexts/StateProvider";
+import { AuthContext } from "@/contexts/AuthProvider";
 
 const HouseCard = ({
   house,
@@ -22,6 +23,7 @@ const HouseCard = ({
   setShowRentInfo,
   showRentInfo,
 }) => {
+  const { user } = useContext(AuthContext);
   const { userInfo, refetchAllHouse } = useContext(StateContext);
   const { pathname } = useLocation();
 
@@ -102,7 +104,7 @@ const HouseCard = ({
         </Link>
         <span
           onClick={() => {
-            handleBookmark();
+            user?.uid ? handleBookmark() : toast.error("Please login first");
           }}
           className="absolute top-3 right-3 text-white text-3xl cursor-pointer hover:scale-110 transition-all duration-300"
         >
